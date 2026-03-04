@@ -1,0 +1,9 @@
+services:
+  reservationsys-lamaisonrestaurant:
+    image: ${DOCKER_REGISTRY-}reservationsyslamaisonrestaurant
+    build:
+      context: .
+      dockerfile: ReservationSys-LaMaisonRestaurant/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
