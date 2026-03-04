@@ -1,22 +1,24 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+    --app-padding-x: 16px;
+    --app-padding-y: 8px;
+}
+
+body > header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: var(--app-padding-x) var(--app-padding-y);
+}
+
+body > main {
+    width: 100%;
+
+    padding: var(--app-padding-x) var(--app-padding-y);
+}
+
+body > footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: var(--app-padding-x) var(--app-padding-y);
 }
