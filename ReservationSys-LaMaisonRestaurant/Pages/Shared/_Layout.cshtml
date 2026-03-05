@@ -6,30 +6,34 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/reset.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ReservationSys_LaMaisonRestaurant.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ReservationSys-LaMaisonRestaurant.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <div>
-            <h1>LaMaison</h1>
+        <div class="content-wrapper">
+            <div>
+                <h2>LaMaison</h2>
+            </div>
+            <nav>
+                <a asp-page="./Index">Make a Reservation</a>
+                <a asp-page="./Admin">Admin panel</a>
+            </nav>
         </div>
-        <nav>
-            <a asp-page="./Index">Reservations</a>
-            <a asp-page="./Admin">Admin panel</a>
-        </nav>
     </header>
     <main>
-        @RenderBody()
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
     </main>
 
     <footer>
-        <div>
+        <div class="content-wrapper">
             &copy; 2026 - LaMaison Restaurant - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

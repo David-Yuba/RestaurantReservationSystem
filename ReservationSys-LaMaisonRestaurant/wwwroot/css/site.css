@@ -1,24 +1,73 @@
-body {
+html {
+    --max-content-width: 768px;
     --app-padding-x: 16px;
     --app-padding-y: 8px;
+    --nav-links-gap: 16px;
+    --form-gap: 4px;
+
+    scrollbar-gutter: stable;
+}
+body {
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
 }
 
-body > header {
+body > header,body > footer {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
     padding: var(--app-padding-x) var(--app-padding-y);
 }
 
 body > main {
     width: 100%;
-
-    padding: var(--app-padding-x) var(--app-padding-y);
+    flex-grow: 1;
+    padding: calc(var(--app-padding-x) / 2) var(--app-padding-y);
 }
 
-body > footer {
-    width: 100%;
+.content-wrapper {
+    max-width: var(--max-content-width);
     display: flex;
+    margin: 0 auto;
+}
+
+header > .content-wrapper {
+    justify-content: space-between;
+    align-items: center;
+}
+
+main > .content-wrapper {
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+footer > .content-wrapper {
     justify-content: center;
-    padding: var(--app-padding-x) var(--app-padding-y);
+    align-items: center;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    gap: var(--nav-links-gap);
+}
+
+h1 {
+    font-size: 1.6rem;
+}
+h2 {
+    font-size: 1.5rem;
+}
+h3 {
+    font-size: 1.4rem;
+}
+h4 {
+    font-size: 1.1rem;
+}
+h5 {
+    font-size: 1rem;
+    font-weight: bold;
+}
+h6 {
+    font-size: 0.9rem;
+    font-weight: bold;
 }

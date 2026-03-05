@@ -1,5 +1,74 @@
 ﻿@page
-@model ReservationSys_LaMaisonRestaurant.Pages.AdminModel
+@model AdminModel
+
 @{
+    ViewData["Title"] = "Index";
 }
-<h1>Admin panel</h1>
+
+<h1>All reservations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].ReferenceCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].TimeSlot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].PartySize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation[0].SpecialRequest)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Reservation)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReferenceCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeSlot)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PartySize)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SpecialRequest)
+                </td>
+                <td>
+                    <a asp-page="./ReservationDetails" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

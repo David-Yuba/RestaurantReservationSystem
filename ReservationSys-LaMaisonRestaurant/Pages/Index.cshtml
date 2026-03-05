@@ -1,6 +1,67 @@
 ﻿@page
 @model IndexModel
+
 @{
-    ViewData["Title"] = "Reservations";
+    ViewData["Title"] = "Create";
 }
-<h1>Make a reservation</h1>
+<div class = "page">
+    <h1>Create a Reservation</h1>
+    <form method="post" asp-page="Index" class="create-form">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Reservation.ReferenceCode"></label>
+            <input asp-for="Reservation.ReferenceCode"/>
+            <span asp-validation-for="Reservation.ReferenceCode"></span>
+        </div>
+        <div>
+            <span>*</span>
+            <label asp-for="Reservation.FullName"></label>
+            <input asp-for="Reservation.FullName" aria-required="true"/>
+            <span asp-validation-for="Reservation.FullName"></span>
+        </div>
+        <div >
+            <span>*</span>
+            <label asp-for="Reservation.Email"></label>
+            <input asp-for="Reservation.Email" aria-required="true"/>
+            <span asp-validation-for="Reservation.Email"></span>
+        </div>
+        <div >
+            <span class="text-danger">*</span>
+            <label asp-for="Reservation.PhoneNumber" ></label>
+            <input asp-for="Reservation.PhoneNumber"  aria-required="true"/>
+            <span asp-validation-for="Reservation.PhoneNumber"></span>
+        </div>
+        <div>
+            <label asp-for="Reservation.Date"></label>
+            <input asp-for="Reservation.Date"/>
+            <span asp-validation-for="Reservation.Date" ></span>
+        </div>
+        <div>
+            <label asp-for="Reservation.TimeSlot"></label>
+            <input asp-for="Reservation.TimeSlot"/>
+            <span asp-validation-for="Reservation.TimeSlot"></span>
+        </div>
+        <div>
+            <label asp-for="Reservation.PartySize"></label>
+            <input asp-for="Reservation.PartySize"/>
+            <span asp-validation-for="Reservation.PartySize"></span>
+        </div>
+        <div>
+            <label asp-for="Reservation.SpecialRequest"></label>
+            <input asp-for="Reservation.SpecialRequest"/>
+            <span asp-validation-for="Reservation.SpecialRequest"></span>
+        </div>
+        <div>
+            <input type="submit" value="Create"/>
+        </div>
+    </form>
+</div>
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
