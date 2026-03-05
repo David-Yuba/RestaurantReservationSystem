@@ -15,7 +15,15 @@ var connectionString = builder.Environment.IsDevelopment() ?
 builder.Services.AddDbContext<ReservationSys_LaMaisonRestaurantContext>(options =>
     options.UseSqlServer(connectionString));
 
+
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ReservationSys_LaMaisonRestaurantContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

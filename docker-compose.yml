@@ -16,7 +16,7 @@ services:
       volumes:
         - sqldata:/var/lib/mssql/data
         - ./db-init:/db-init
-      entrypoint: /bin/bash /db-init/entrypoint.sh
+      #entrypoint: /bin/bash /db-init/entrypoint.sh
   reservationsys-lamaisonrestaurant:
     image: ${DOCKER_REGISTRY-}reservationsyslamaisonrestaurant
     build:
