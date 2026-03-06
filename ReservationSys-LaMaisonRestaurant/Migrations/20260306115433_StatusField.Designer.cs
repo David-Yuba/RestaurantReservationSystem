@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservationSys_LaMaisonRestaurant.Data;
 
@@ -11,9 +12,11 @@ using ReservationSys_LaMaisonRestaurant.Data;
 namespace ReservationSys_LaMaisonRestaurant.Migrations
 {
     [DbContext(typeof(ReservationSys_LaMaisonRestaurantContext))]
-    partial class ReservationSys_LaMaisonRestaurantContextModelSnapshot : ModelSnapshot
+    [Migration("20260306115433_StatusField")]
+    partial class StatusField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

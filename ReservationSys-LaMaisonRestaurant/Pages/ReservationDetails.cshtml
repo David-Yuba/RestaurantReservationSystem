@@ -71,6 +71,14 @@
                 @Html.DisplayFor(model => model.Reservation.SpecialRequest)
             </p>
         </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.Status)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.Status)
+            </p>
+        </div>
     </div>
     <div>
         <a asp-page="./Admin">Back to Reservation list</a>

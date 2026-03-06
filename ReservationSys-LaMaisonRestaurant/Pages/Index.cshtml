@@ -9,11 +9,6 @@
     <form method="post" asp-page="Index" class="create-form">
         <div asp-validation-summary="ModelOnly"></div>
         <div class="form-field create-form-field">
-            <label asp-for="Reservation.ReferenceCode" class="form-label"></label>
-            <input asp-for="Reservation.ReferenceCode" class="form-data"/>
-            <span asp-validation-for="Reservation.ReferenceCode"></span>
-        </div>
-        <div class="form-field create-form-field">
             <label asp-for="Reservation.FullName" class="form-label"></label>
             <input asp-for="Reservation.FullName" class="form-data" aria-required="true" />
             <span asp-validation-for="Reservation.FullName"></span>
@@ -47,6 +42,12 @@
             <label asp-for="Reservation.SpecialRequest" class="form-label"></label>
             <input asp-for="Reservation.SpecialRequest" class="form-data"/>
             <span asp-validation-for="Reservation.SpecialRequest"></span>
+        </div>
+        <div class="form-field create-form-field" style="display: none;">
+            <input asp-for="Reservation.ReferenceCode" class="form-data" value="defaultValue" />
+        </div>
+        <div class="form-field create-form-field" style="display: none;">
+            <input asp-for="Reservation.Status" class="form-data" value="Pending"/>
         </div>
         <div class="form-field create-form-field">
             <input type="submit" value="Create"/>

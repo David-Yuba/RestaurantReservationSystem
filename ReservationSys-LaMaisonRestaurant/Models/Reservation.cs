@@ -24,4 +24,6 @@ public class Reservation
     public int PartySize { get; set; }
 
     public string? SpecialRequest { get; set; }
+
+    public string Status { get; set; } = "Pending";
 }

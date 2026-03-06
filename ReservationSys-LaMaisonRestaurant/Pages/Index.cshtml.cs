@@ -25,10 +25,13 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || Reservation.Status != "Pending" || Reservation.ReferenceCode != "defaultValue")
         {
             return Page();
         }
+
+        int uniqueCode = Guid.NewGuid().ToString().GetHashCode();
+        Reservation.ReferenceCode = $"LM-{uniqueCode.ToString("X")[0..5]}";
 
         _context.Reservation.Add(Reservation);
         await _context.SaveChangesAsync();
