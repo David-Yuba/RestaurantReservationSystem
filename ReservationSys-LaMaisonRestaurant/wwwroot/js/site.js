@@ -1,4 +1,13 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener("DOMContentLoaded", main);
+function setTableColumnWidth() {
+    let tableHeadings = Array.from(document.querySelectorAll("th"));
+    let tableData = Array.from(document.querySelectorAll("td"));
+    let highestWidth = tableData.map(element => element.getBoundingClientRect().width).reduce((highestValue, currentValue) => highestValue < currentValue ? currentValue : highestValue);
 
-// Write your JavaScript code.
+    tableHeadings.forEach(function (heading) {
+        heading.style.width = `${Math.ceil(highestWidth)}px`;
+    })
+}
+function main() {
+    setTableColumnWidth()
+}

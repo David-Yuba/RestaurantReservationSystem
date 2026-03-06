@@ -1,1 +1,26 @@
-﻿
+﻿.form-field {
+    --label-width: 120px;
+}
+
+.create-form-field {
+    --input-field-width: 240px;
+}
+.create-form-field > .form-label {
+    display: inline-block;
+    width: var(--label-width);
+    font-size: 1rem;
+    font-weight: bold;
+}
+.create-form-field > .form-data {
+    width: var(--input-field-width);
+}
+.details-display .form-label {
+    display: inline-block;
+    width: var(--label-width);
+    font-size: 1.1rem;
+    font-family: "Fire-Sans-Regular";
+}
+
+.details-display .form-data {
+    font-weight: bold;
+}

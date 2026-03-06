@@ -4,61 +4,75 @@
 @{
     ViewData["Title"] = "ReservationDetails";
 }
-
-<h1>Reservation</h1>
-
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.ReferenceCode)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.ReferenceCode)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.FullName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.Date)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.Date)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.TimeSlot)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.TimeSlot)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.PartySize)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.PartySize)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservation.SpecialRequest)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.SpecialRequest)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-page="./Admin">Back to Reservation list</a>
+<div class="page">
+    <h1>Reservation</h1>
+    <div class="details-display">
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.ReferenceCode)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.ReferenceCode)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.FullName)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.FullName)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.Email)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.Email)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.PhoneNumber)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.PhoneNumber)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.Date)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.Date)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.TimeSlot)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.TimeSlot)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.PartySize)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.PartySize)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.SpecialRequest)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.SpecialRequest)
+            </p>
+        </div>
+    </div>
+    <div>
+        <a asp-page="./Admin">Back to Reservation list</a>
+    </div>
 </div>

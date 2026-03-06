@@ -1,11 +1,9 @@
 html {
-    --max-content-width: 768px;
+    --max-content-width: 1100px;
     --app-padding-x: 16px;
     --app-padding-y: 8px;
     --nav-links-gap: 16px;
     --form-gap: 4px;
-
-    scrollbar-gutter: stable;
 }
 body {
     display: flex;
@@ -45,29 +43,15 @@ footer > .content-wrapper {
     align-items: center;
 }
 
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 header nav {
     display: flex;
     align-items: center;
+    transform: translateY(2px);
     gap: var(--nav-links-gap);
-}
-
-h1 {
-    font-size: 1.6rem;
-}
-h2 {
-    font-size: 1.5rem;
-}
-h3 {
-    font-size: 1.4rem;
-}
-h4 {
-    font-size: 1.1rem;
-}
-h5 {
-    font-size: 1rem;
-    font-weight: bold;
-}
-h6 {
-    font-size: 0.9rem;
-    font-weight: bold;
 }

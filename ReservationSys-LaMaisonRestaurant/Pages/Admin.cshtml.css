@@ -1,0 +1,39 @@
+﻿table {
+    --n-columns: 8;
+    --column-gap: 16px;
+    --heading-row-gap: 16px;
+    --row-gap: 16px;
+    --heading-row-padding: 4px;
+
+    display: grid;
+}
+thead, tbody{
+    display: inherit;
+
+}
+thead {
+    margin-bottom: var(--heading-row-gap);
+    padding-bottom: var(--heading-row-padding);
+    border-bottom: 1px solid black;
+}
+tbody {
+    gap: var(--row-gap);
+}
+
+
+tr {
+    display: inherit;
+    gap: var(--column-gap);
+    grid-template-columns: repeat(var(--n-columns), 1fr);
+}
+tr:not(thead tr) {
+    border-bottom: 1px dotted black;
+}
+
+th {
+    text-align: left;
+    font-size: 1.1rem;
+}
+td {
+    font-weight: 500;
+}

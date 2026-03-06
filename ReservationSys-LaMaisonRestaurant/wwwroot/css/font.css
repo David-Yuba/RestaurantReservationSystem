@@ -1,0 +1,49 @@
+﻿@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto_Flex/RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf");
+}
+@font-face {
+    font-family: "Lato-Regular";
+    src: url("../fonts/Lato/Lato-Regular.ttf");
+}
+@font-face {
+    font-family: "Lato-Bold";
+    src: url("../fonts/Lato/Lato-Bold.ttf");
+}
+@font-face {
+    font-family: "Fire-Sans-Regular";
+    src: url("../fonts/Fira_Sans/FiraSans-Regular.ttf");
+}
+@font-face {
+    font-family: "Fire-Sans-SemiBold";
+    src: url("../fonts/Fira_Sans/FiraSans-SemiBold.ttf");
+}
+html {
+    font-family: "Fire-Sans-Regular";
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+}
+
+h4 {
+    font-size: 1.0rem;
+}
+
+h5 {
+    font-size: 0.9rem;
+    font-family: "Fire-Sans-SemiBold"
+}
+
+h6 {
+    font-size: 0.8rem;
+    font-family: "Fire-Sans-SemiBold"
+}

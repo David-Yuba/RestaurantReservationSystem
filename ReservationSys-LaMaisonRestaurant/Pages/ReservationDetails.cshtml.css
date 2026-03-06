@@ -1,0 +1,10 @@
+﻿.details-display {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-field {
+    display: flex;
+    gap: 12px;
+}
