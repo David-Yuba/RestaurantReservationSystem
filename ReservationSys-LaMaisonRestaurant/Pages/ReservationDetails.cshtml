@@ -6,7 +6,7 @@
 }
 <div class="page">
     <h1>Reservation</h1>
-    <div class="details-display">
+    <form method="post" class="details-display">
         <div class="form-field">
             <h5 class="form-label">
                 @Html.DisplayNameFor(model => model.Reservation.ReferenceCode)
@@ -75,11 +75,17 @@
             <h5 class="form-label">
                 @Html.DisplayNameFor(model => model.Reservation.Status)
             </h5>
-            <p class="form-data">
-                @Html.DisplayFor(model => model.Reservation.Status)
-            </p>
+            <select asp-for="Reservation.Status">
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Completed">Completed</option>
+            </select>
         </div>
-    </div>
+        <div class="form-field">
+            <input type="submit" value="Apply changes"/>
+        </div>
+    </form>
     <div>
         <a asp-page="./Admin">Back to Reservation list</a>
     </div>

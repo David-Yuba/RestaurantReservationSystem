@@ -19,8 +19,10 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
             _context = context;
         }
 
+        [BindProperty]
         public Reservation Reservation { get; set; } = default!;
-
+        [BindProperty]
+        public int Id { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -38,6 +40,20 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
                 Reservation = reservation;
             }
             return Page();
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (Reservation.Status != "Pending" && Reservation.Status != "Confirmed" && Reservation.Status != "Cancelled" && Reservation.Status != "Completed")
+            {
+                return Page();
+            }
+            var reservation = _context.Reservation.FirstOrDefault(x => x.Id == Id);
+            if (reservation is not null){
+                reservation.Status = Reservation.Status;
+                _context.SaveChanges();
+            }
+
+            return RedirectToPage("ReservationDetails", new { id = Id });
         }
     }
 }

@@ -116,3 +116,7 @@ async function onTimeSlotInput(event) {
         console.error(error.message);
     }
 }
+function onReservationClick(id) {
+    const detailsButton = document.getElementById(`${id}`);
+    detailsButton.click();
+}

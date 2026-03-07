@@ -1,5 +1,5 @@
 ﻿table {
-    --n-columns: 8;
+    --n-columns: 7;
     --column-gap: 16px;
     --heading-row-gap: 16px;
     --row-gap: 16px;
@@ -26,8 +26,12 @@ tr {
     gap: var(--column-gap);
     grid-template-columns: repeat(var(--n-columns), 1fr);
 }
+thead tr {
+    gap: 8px;
+}
 tr:not(thead tr) {
-    border-bottom: 1px dotted black;
+    --border-color: black;
+    border-bottom: 2px dotted var(--border-color);
 }
 
 th {
@@ -36,4 +40,45 @@ th {
 }
 td {
     font-weight: 500;
+}
+
+.page ::deep form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    justify-items: center;
+}
+input[type=submit]{
+    grid-column: span 3;
+    width: 100%;
+}
+.filter-group {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+}
+.page ::deep select {
+    flex-grow: 1;
+}
+
+.details-button, .details-button * {
+    display: none;
+}
+
+tr {
+    padding: 0px 8px;
+}
+tr:not(thead tr) {
+    padding: 8px 8px 0px 8px;
+    cursor: pointer;
+}
+tr:hover:not(thead tr) {
+    background-color: aliceblue;
+}
+
+.full {
+    color: brown;
 }

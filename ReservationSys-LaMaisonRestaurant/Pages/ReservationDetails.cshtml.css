@@ -1,4 +1,4 @@
-﻿.details-display {
+﻿.page ::deep .details-display {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -7,4 +7,11 @@
 .form-field {
     display: flex;
     gap: 12px;
+}
+.form-data {
+    padding-left: 4px;
+}
+.page ::deep .option, .page ::deep select {
+    font-size: 1rem;
+    font-weight: bold;
 }

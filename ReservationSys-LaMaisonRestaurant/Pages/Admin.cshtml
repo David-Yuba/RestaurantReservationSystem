@@ -5,8 +5,35 @@
     ViewData["Title"] = "Index";
 }
 <div class="page">
-    <h1>All reservations</h1>
-
+    <form>
+        <div class="filter-group">
+            <h4>Sort date by</h4>
+            <select type="date" asp-for="SortDateBy">
+                <option value="Upcoming">Upcoming</option>
+                <option value="Ascending">Ascending</option>
+                <option value="Descending">Descending</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <h4>Filter date</h4>
+            <input type="date" asp-for="FilterDate" />
+        </div>
+        <div class="filter-group">
+            <h4>Filter status</h4>
+            <select type="date" asp-for="FilterStatus" >
+                <option value="">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        <input type="submit" value="Apply"/>
+    </form>
+    <div>
+        <h4>Expected number of guests: @Model.GuestNumber</h4>
+    </div>
+    <h1>Reservations</h1>
     <table>
         <thead>
             <tr>
@@ -37,7 +64,7 @@
         <tbody>
             @foreach (var item in Model.Reservation)
             {
-                <tr>
+                <tr onclick="onReservationClick(@item.Id)">
                     <td>
                         @Html.DisplayFor(modelItem => item.ReferenceCode)
                     </td>
@@ -53,14 +80,14 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
-                    <td>
+                    <td class="@(Model.IsSlotFull(item.Date,item.TimeSlot) ? "full" : "not-full")">
                         @Html.DisplayFor(modelItem => item.TimeSlot)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PartySize)
                     </td>
-                    <td>
-                        <a asp-page="./ReservationDetails" asp-route-id="@item.Id">Details</a>
+                    <td class="details-button">
+                        <a class="details-button" asp-page="./ReservationDetails" asp-route-id="@item.Id" id="@item.Id">Details</a>
                     </td>
                 </tr>
             }
