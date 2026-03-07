@@ -1,7 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
 using ReservationSys_LaMaisonRestaurant.Models;
+using System.ComponentModel;
 
 namespace ReservationSys_LaMaisonRestaurant.Pages;
 
@@ -19,14 +24,38 @@ public class IndexModel : PageModel
     {
         return Page();
     }
+    [BindProperty(SupportsGet = true)]
+    public DateOnly? Date { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public TimeOnly TimeSlot { get; set; }
+    public IActionResult OnGetDate()
+    {
+        List<OccupancySlot> occupancySlots = ReturnOccupancySlots();
+        return new JsonResult(occupancySlots);
+    }
 
+    public IActionResult OnGetTime()
+    {
+        int maximumPartySize = CalulateMaximumPartySize();
+        return new JsonResult(maximumPartySize);
+    }
     [BindProperty]
     public Reservation Reservation { get; set; } = default!;
-
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid || Reservation.Status != "Pending" || Reservation.ReferenceCode != "defaultValue")
         {
+            return Page();
+        }
+
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        if (Reservation.Date < today || Reservation.Date > today.AddDays(29))
+        {
+            return Page();
+        }
+
+        int occupancySum = ReturnOccupancySum();
+        if(occupancySum + Reservation.PartySize > 20) {
             return Page();
         }
 
@@ -36,6 +65,69 @@ public class IndexModel : PageModel
         _context.Reservation.Add(Reservation);
         await _context.SaveChangesAsync();
 
-        return RedirectToPage("./Index");
+        return RedirectToPage("SuccessfulReservation", new { id = Reservation.Id });
     }
+
+    private int CalulateMaximumPartySize()
+    {
+        if (Date is null) return 10;
+
+        int maximumTimeSlotOccupancy = 20;
+
+        var reservations = from r in _context.Reservation
+                           select r;
+
+        reservations = reservations.Where(res => res.TimeSlot == TimeSlot);
+
+        int maximumPartySize = maximumTimeSlotOccupancy - reservations.ToList().Aggregate(0, (sum, res) => sum + res.PartySize);
+
+        if (maximumPartySize > 10) maximumPartySize = 10;
+        return maximumPartySize;
+    }
+    private List<OccupancySlot> ReturnOccupancySlots()
+    {
+        var reservations = from m in _context.Reservation
+                           select m;
+        reservations = reservations.Where(res => res.Date == Date);
+        List<OccupancySlot> occupancy = reservations.ToList()
+            .Select(res => new OccupancySlot(res.TimeSlot, res.PartySize))
+            .OrderBy(occupancy => occupancy.TimeSlot).ToList();
+
+        var temp = new List<OccupancySlot>();
+        for (int i = 0; i < occupancy.Count(); i++)
+        {
+            if (i == 0) temp.Add(occupancy[i]);
+            else if (temp.Last().TimeSlot == occupancy[i].TimeSlot)
+            {
+                temp.Last().PartySize += occupancy[i].PartySize;
+            }
+            else
+            {
+                temp.Add(occupancy[i]);
+            }
+        }
+
+        return temp;
+    }
+    private int ReturnOccupancySum()
+    {
+        var occupancySum = from r in _context.Reservation
+                           where (r.Date == Reservation.Date) && (r.TimeSlot == Reservation.TimeSlot)
+                           select r.PartySize;
+        int sum = 0;
+        foreach (var PartySize in occupancySum)
+        {
+            sum += PartySize;
+        }
+        return sum;
+    }
+    private class OccupancySlot {
+        public TimeOnly TimeSlot { get; set; }
+        public int PartySize { get; set; }
+        public OccupancySlot(TimeOnly t, int s)
+        {
+            TimeSlot = t;
+            PartySize = s;
+        }
+    };
 }

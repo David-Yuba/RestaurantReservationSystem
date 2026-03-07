@@ -1,5 +1,7 @@
 ﻿.form-field {
     --label-width: 120px;
+    display: flex;
+    gap: var(--form-gap)
 }
 
 .create-form-field {
@@ -20,7 +22,43 @@
     font-size: 1.1rem;
     font-family: "Fire-Sans-Regular";
 }
-
 .details-display .form-data {
     font-weight: bold;
+}
+
+.date-table {
+    position: absolute;
+    visibility: hidden;
+    z-index: 10;
+    user-select: none;
+    background-color: var(--background-color);
+}
+.date-table.active {
+    visibility: visible;
+}
+.month-year {
+    padding-top: 12px;
+    text-align: center;
+}
+.date-table-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.day-name {
+    transform: translateY(4px);
+}
+.date-table-days > * {
+    --square-size: 0; /*Value set using javascript*/
+
+    height: var(--square-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.date-table-days > :not(.day-name):hover {
+    background-color: aliceblue;
+}
+
+.hidden {
+    display: none;
 }

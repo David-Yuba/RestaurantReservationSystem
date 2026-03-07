@@ -25,22 +25,33 @@
         </div>
         <div class="form-field create-form-field">
             <label asp-for="Reservation.Date" class="form-label"></label>
-            <input asp-for="Reservation.Date" class="form-data"/>
+            <input asp-for="Reservation.Date" class="form-data date-input-field" autocomplete="off"
+                   onfocus="onDateInputFocus(event)" onblur="onDateInputBlur(event)" oninput="onDateInput(event)"/>
             <span asp-validation-for="Reservation.Date" ></span>
         </div>
         <div class="form-field create-form-field">
             <label asp-for="Reservation.TimeSlot" class="form-label"></label>
-            <input asp-for="Reservation.TimeSlot" class="form-data"/>
+            <select asp-for="Reservation.TimeSlot" class="form-data" oninput="onTimeSlotInput(event)">
+                <option value="">Select time</option>
+@{
+    TimeOnly startTime = new TimeOnly(12,00);
+    TimeOnly endTime = new TimeOnly(22,00);
+
+    for (TimeOnly i=startTime ; i < endTime.AddMinutes(-30) ; i = i.AddMinutes(30)){
+                <option value="@i" class="time-slot-option">@i</option>
+    }
+}
+            </select>
             <span asp-validation-for="Reservation.TimeSlot"></span>
         </div>
         <div class="form-field create-form-field">
             <label asp-for="Reservation.PartySize" class="form-label"></label>
-            <input asp-for="Reservation.PartySize" class="form-data"/>
+            <input asp-for="Reservation.PartySize" class="form-data party-size-input"/>
             <span asp-validation-for="Reservation.PartySize"></span>
         </div>
-        <div class="form-field create-form-field">
+        <div class="form-field create-form-field textarea-form-field">
             <label asp-for="Reservation.SpecialRequest" class="form-label"></label>
-            <input asp-for="Reservation.SpecialRequest" class="form-data"/>
+            <textarea asp-for="Reservation.SpecialRequest" maxlength="500" class="form-data" rows="5"></textarea>
             <span asp-validation-for="Reservation.SpecialRequest"></span>
         </div>
         <div class="form-field create-form-field" style="display: none;">
@@ -53,6 +64,34 @@
             <input type="submit" value="Create"/>
         </div>
     </form>
+    <div class="date-table" onclick="onDateDayClick(event)">
+@{
+    DateTime today = DateTime.Now;
+        <div tabindex="0" class="month-year" month-year>@today.ToString("MMMM") - @today.Year</div>
+}
+        <div class="date-table-days">
+            <div tabindex="0" class="day-name" day-name>Su</div>
+            <div tabindex="0" class="day-name" day-name>Mo</div>
+            <div tabindex="0" class="day-name" day-name>Tu</div>
+            <div tabindex="0" class="day-name" day-name>We</div>
+            <div tabindex="0" class="day-name" day-name>Th</div>
+            <div tabindex="0" class="day-name" day-name>Fr</div>
+            <div tabindex="0" class="day-name" day-name>Sa</div>
+@{
+    DateOnly todaysDate = DateOnly.FromDateTime(DateTime.Now);
+    for(DayOfWeek i=DayOfWeek.Sunday ; i<todaysDate.DayOfWeek ; i++) {
+            <div tabindex="0" class="day-name" day-name></div>
+    }
+    for (int i=0 ; i<30 ; i++){
+            <div tabindex="0" date-value ="@todaysDate.ToString("MM-dd-yy")">@todaysDate.Day</div>
+        todaysDate = todaysDate.AddDays(1);
+    }
+
+}
+
+        </div>
+        <div></div>
+    </div>
 </div>
 
 @section Scripts {

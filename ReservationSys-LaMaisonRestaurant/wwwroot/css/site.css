@@ -4,11 +4,15 @@ html {
     --app-padding-y: 8px;
     --nav-links-gap: 16px;
     --form-gap: 4px;
+
+    --background-color: white;
 }
 body {
     display: flex;
     min-height: 100svh;
     flex-direction: column;
+    
+    background-color: var(--background-color);
 }
 
 body > header,body > footer {

@@ -1,0 +1,77 @@
+﻿@page "{id:int}"
+@model SuccessfulReservationModel
+@{
+}
+
+<div class="page">
+    <h1>Reservation successful</h1>
+    <div class="details-display">
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.ReferenceCode)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.ReferenceCode)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.FullName)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.FullName)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.Email)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.Email)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.PhoneNumber)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.PhoneNumber)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.Date)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.Date)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.TimeSlot)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.TimeSlot)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.PartySize)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.PartySize)
+            </p>
+        </div>
+        <div class="form-field">
+            <h5 class="form-label">
+                @Html.DisplayNameFor(model => model.Reservation.SpecialRequest)
+            </h5>
+            <p class="form-data">
+                @Html.DisplayFor(model => model.Reservation.SpecialRequest)
+            </p>
+        </div>
+    </div>
+    <div>
+        <a asp-page="./Index">Make another reservation</a>
+    </div>
+</div>
