@@ -31,6 +31,8 @@ public class IndexModel : PageModel
     public DateOnly? Date { get; set; }
     [BindProperty(SupportsGet = true)]
     public TimeOnly? TimeSlot { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public bool PrivateDining { get; set; }
     public IActionResult OnGetSize()
     {
         List<OccupancySlot> occupancySlots = ReturnOccupancySlots();
@@ -42,13 +44,18 @@ public class IndexModel : PageModel
         List<OccupancySlot> occupancySlots = ReturnOccupancySlots();
         return new JsonResult(occupancySlots);
     }
-
     public IActionResult OnGetTime()
     {
         int maximumPartySize = CalulateMaximumPartySize();
         return new JsonResult(maximumPartySize);
     }
-    
+    public IActionResult OnGetPrivateDining()
+    {
+        if (Date is null) return new JsonResult(new int[0]);
+        List<TimeOnly> privateDiningReservations = getAllPrivateDiningReservations();
+        return new JsonResult(privateDiningReservations);
+    }
+
     
     [BindProperty]
     public Reservation Reservation { get; set; } = default!;
@@ -65,13 +72,29 @@ public class IndexModel : PageModel
             return Page();
         }
 
+        int uniqueCode = Guid.NewGuid().ToString().GetHashCode();
+        Reservation.ReferenceCode = $"LM-{uniqueCode.ToString("X")[0..5]}";
+
+        if (Reservation.IsPrivateDining)
+        {
+            var privateDiningReservations = from r in _context.Reservation
+                                            where r.Date == Reservation.Date
+                                            select r.TimeSlot;
+
+            if (privateDiningReservations.ToList().Contains(Reservation.TimeSlot))
+                return Page();
+            if (Reservation.PartySize < 6 || Reservation.PartySize > 12)
+                return Page();
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("SuccessfulReservation", new { id = Reservation.Id });
+        }
+
         int occupancySum = ReturnOccupancySum();
         if(occupancySum + Reservation.PartySize > 20) {
             return Page();
         }
-
-        int uniqueCode = Guid.NewGuid().ToString().GetHashCode();
-        Reservation.ReferenceCode = $"LM-{uniqueCode.ToString("X")[0..5]}";
 
         _context.Reservation.Add(Reservation);
         await _context.SaveChangesAsync();
@@ -131,6 +154,14 @@ public class IndexModel : PageModel
             sum += PartySize;
         }
         return sum;
+    }
+    private List<TimeOnly> getAllPrivateDiningReservations()
+    {
+        var privateDiningReservations = from r in _context.Reservation
+                           where (r.Date == Date) && (r.IsPrivateDining == true)
+                           select r.TimeSlot;
+
+        return privateDiningReservations.ToList();
     }
     private class OccupancySlot {
         public TimeOnly TimeSlot { get; set; }

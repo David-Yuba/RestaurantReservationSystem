@@ -50,6 +50,9 @@
                     @Html.DisplayNameFor(model => model.Reservation[0].PhoneNumber)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Reservation[0].IsPrivateDining)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Reservation[0].Date)
                 </th>
                 <th>
@@ -58,7 +61,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Reservation[0].PartySize)
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -76,6 +78,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsPrivateDining)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Date)

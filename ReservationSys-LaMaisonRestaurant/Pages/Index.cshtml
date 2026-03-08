@@ -23,6 +23,12 @@
             <input asp-for="Reservation.PhoneNumber" class="form-data" aria-required="true" />
             <span asp-validation-for="Reservation.PhoneNumber"></span>
         </div>
+        <div class="form-field create-form-field private-dining-field hidden">
+            <label asp-for="Reservation.IsPrivateDining" class="form-label"></label>
+            <input asp-for="Reservation.IsPrivateDining" class="form-data" 
+                   onchange="onPrivateDiningChange()"/>
+            <span asp-validation-for="Reservation.IsPrivateDining"></span>
+        </div>
         <div class="form-field create-form-field">
             <label asp-for="Reservation.PartySize" class="form-label"></label>
             <input asp-for="Reservation.PartySize" class="form-data party-size-input" 

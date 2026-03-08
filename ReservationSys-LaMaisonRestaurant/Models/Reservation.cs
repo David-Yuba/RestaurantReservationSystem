@@ -29,4 +29,5 @@ public class Reservation
     public string? SpecialRequest { get; set; }
 
     public string Status { get; set; } = "Pending";
+    public bool IsPrivateDining { get; set; } = false;
 }

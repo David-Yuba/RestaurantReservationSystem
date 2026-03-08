@@ -1,4 +1,6 @@
-﻿document.addEventListener("DOMContentLoaded", main);
+﻿let IS_PRIVATE_DINING = false;
+
+document.addEventListener("DOMContentLoaded", main);
 window.addEventListener("resize", main);
 
 function setTableColumnWidth() {
@@ -37,10 +39,12 @@ function setDateTableSizeAndPosition() {
         table.style.top = `${dateInputFieldPosition[1] + dateInputFieldSize[1]}px`;
     });
 }
+
 function main() {
     setTableColumnWidth();
     setDateTableSizeAndPosition();
 }
+
 function onDateInputFocus(event) {
     event.preventDefault();
     let table = document.querySelector(".date-table");
@@ -67,12 +71,55 @@ function onDateDayClick(event) {
     dateInputField.value = event.target.getAttribute("date-value");
     dateInputField.dispatchEvent(new InputEvent("input"));
 }
+function onReservationClick(id) {
+    const detailsButton = document.getElementById(`${id}`);
+    detailsButton.click();
+}
+function onPrivateDiningChange() {
+    IS_PRIVATE_DINING = !IS_PRIVATE_DINING;
+    const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
+
+    if (IS_PRIVATE_DINING) {
+        const partySizeInputEl = document.getElementsByClassName("party-size-input")[0];
+        const form = document.getElementsByClassName("create-form")[0];
+
+        $(form).removeData('validator');
+        $(form).removeData('unobtrusiveValidation');
+
+        partySizeInputEl.setAttribute('data-val-range-min', `${6}`);
+        partySizeInputEl.setAttribute('data-val-range-max', `${12}`);
+        partySizeInputEl.setAttribute('data-val-range', `The field PartySize must be between 6 and 12.`);
+
+        $.validator.unobtrusive.parse(form);
+
+        const privateDiningTimeSlots = ["6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM", "9:00 PM"]
+        timeSlotOptionEls.forEach(function (el) {
+            if (privateDiningTimeSlots.some((slot) => slot == el.value)) {
+                el.classList.remove("hidden");
+            }
+            else el.classList.add("hidden")
+        });
+        if (partySizeInputEl.value) $(partySizeInputEl).valid();
+    }
+    else {
+        timeSlotOptionEls.forEach(function (el) {
+            el.classList.remove("hidden"); 
+        });
+    }
+}
+
 async function onPartySizeInput(event) {
     const url = window.location.href;
     const partySizeInputEl = document.getElementsByClassName("party-size-input")[0];
     const dateInputEl = document.getElementsByClassName("date-input-field")[0];
     const timeSlotInputEl = document.getElementsByClassName("time-slot-input")[0];
     if (!partySizeInputEl || !dateInputEl || !timeSlotInputEl) return;
+
+if (IS_PRIVATE_DINING) {
+    await updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl);
+
+    return;
+}
 
     try {
         const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
@@ -84,11 +131,10 @@ async function onPartySizeInput(event) {
         const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
 
         timeSlotOptionEls.forEach(function (el) {
-            let maxPeople = timeSlotIsNotFull(occupancyList, el, partySizeInputEl.value);
-            if (maxPeople > 0 && maxPeople < 20) {
-                el.classList.remove("hidden");
+            if (occupancyList.some(slot => reformatStringDate(slot.timeSlot) == el.value)) {
+                el.classList.add("hidden");
             }
-            else el.classList.add("hidden")
+            else el.classList.remove("hidden")
         });
 
 
@@ -98,6 +144,7 @@ async function onPartySizeInput(event) {
         $(form).removeData('validator');
         $(form).removeData('unobtrusiveValidation');
 
+        partySizeInputEl.setAttribute('data-val-range-min', `0`);
         partySizeInputEl.setAttribute('data-val-range-max', `${newMaxPartySize}`);
         partySizeInputEl.setAttribute('data-val-range', `The field PartySize must be between 0 and ${newMaxPartySize}.`);
 
@@ -118,6 +165,23 @@ async function onDateInput(event) {
     const timeSlotInputEl = document.getElementsByClassName("time-slot-input")[0];
 
     if (!partySizeInputEl || !dateInputEl || !timeSlotInputEl) return;
+    const selectedDay = new Date(dateInputEl.value).getDay();
+
+    if (selectedDay == 5 || selectedDay == 6) {
+        const privateDiningFieldEl = document.getElementsByClassName("private-dining-field")[0];
+        privateDiningFieldEl.classList.remove("hidden");
+    }
+    else {
+        const privateDiningFieldEl = document.getElementsByClassName("private-dining-field")[0];
+        privateDiningFieldEl.classList.add("hidden");
+        if (IS_PRIVATE_DINING) privateDiningFieldEl.click();
+    }
+
+if (IS_PRIVATE_DINING) {
+    await updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl);
+
+    return;
+}
 
     try {
         const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
@@ -139,6 +203,8 @@ async function onDateInput(event) {
         const form = document.getElementsByClassName("create-form")[0];
         $(form).removeData('validator');
         $(form).removeData('unobtrusiveValidation');
+
+        partySizeInputEl.setAttribute('data-val-range-min', `0`);
         partySizeInputEl.setAttribute('data-val-range-max', `${newMaxPartySize}`);
         partySizeInputEl.setAttribute('data-val-range', `The field PartySize must be between 0 and ${newMaxPartySize}.`);
 
@@ -153,11 +219,53 @@ async function onDateInput(event) {
     }
 }
 async function onTimeSlotInput(event) {
+    const url = window.location.href;
+    const partySizeInputEl = document.getElementsByClassName("party-size-input")[0];
+    const dateInputEl = document.getElementsByClassName("date-input-field")[0];
+    const timeSlotInputEl = document.getElementsByClassName("time-slot-input")[0];
 
+    if (!partySizeInputEl || !dateInputEl || !timeSlotInputEl) return;
+
+if (IS_PRIVATE_DINING) {
+    await updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl);
+
+    return;
 }
-function onReservationClick(id) {
-    const detailsButton = document.getElementById(`${id}`);
-    detailsButton.click();
+
+    try {
+        const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const occupancyList = await response.json();
+        const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
+
+        timeSlotOptionEls.forEach(function (el) {
+            let maxPeople = timeSlotIsNotFull(occupancyList, el, partySizeInputEl.value);
+            if (maxPeople > 0 && maxPeople < 20) {
+                el.classList.remove("hidden");
+            }
+            else el.classList.add("hidden");
+        });
+
+        const newMaxPartySize = getNewMaxPartySize(occupancyList, timeSlotInputEl.value);
+        const form = document.getElementsByClassName("create-form")[0];
+        $(form).removeData('validator');
+        $(form).removeData('unobtrusiveValidation');
+
+        partySizeInputEl.setAttribute('data-val-range-min', `0`);
+        partySizeInputEl.setAttribute('data-val-range-max', `${newMaxPartySize}`);
+        partySizeInputEl.setAttribute('data-val-range', `The field PartySize must be between 0 and ${newMaxPartySize}.`);
+
+        $.validator.unobtrusive.parse(form);
+
+        if (partySizeInputEl.value) $(partySizeInputEl).valid();
+        if (timeSlotInputEl.value) {
+            isCurrentValueValid(timeSlotInputEl, occupancyList);
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 function reformatTimeString(time) {
@@ -179,11 +287,48 @@ function getNewMaxPartySize(occupancyList, timeSlot) {
     return 20 - parseInt(occupancySlot.partySize);
 }
 function isCurrentValueValid(el, occupancyList) {
+
+if (IS_PRIVATE_DINING) {
+    if (occupancyList.some(slot => reformatTimeString(slot) == el.value)) {
+        el.value = "";
+        return;
+    }
+    return;
+}
+
     const timeSlot = occupancyList.find(v => reformatTimeString(v.timeSlot) == el.value);
     if (timeSlot) {
         let newMaxPartySize = 20 - timeSlot.partySize;
         if (newMaxPartySize < parseInt(el.value)) {
             el.value = "";
         }
+    }
+}
+
+async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
+    try {
+        const response = await fetch(`${url}?handler=PrivateDining&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        let occupancyList = await response.json();
+        console.log(occupancyList);
+        const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
+
+        const privateDiningTimeSlots = ["6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM", "9:00 PM"]
+        timeSlotOptionEls.forEach(function (el) {
+            if (occupancyList.some(slot => reformatTimeString(slot) == el.value)) {
+                el.classList.add("hidden");
+            }
+            else if (privateDiningTimeSlots.some((slot) => slot == el.value))
+                el.classList.remove("hidden");
+        });
+
+        if (partySizeInputEl.value) $(partySizeInputEl).valid();
+        if (timeSlotInputEl.value) {
+            isCurrentValueValid(timeSlotInputEl, occupancyList);
+        }
+    } catch (error) {
+        console.error(error.message);
     }
 }
