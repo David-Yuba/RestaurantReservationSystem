@@ -45,19 +45,19 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
             }
             if (SortDateBy == "Ascending") {
                 reservations = from r in reservations
-                               orderby r.Date ascending
+                               orderby r.Date ascending, r.TimeSlot ascending
                                select r;
             }
             else if (SortDateBy == "Descending")
             {
                 reservations = from r in reservations
-                               orderby r.Date descending
+                               orderby r.Date descending, r.TimeSlot descending
                                select r;
             }
             else 
             {
                 reservations = (from r in reservations
-                           orderby r.Date > today ? 0 : 1, r.Date ascending
+                           orderby r.Date > today ? 0 : 1, r.Date ascending , r.TimeSlot ascending
                            select r);
             }
 
