@@ -24,6 +24,12 @@
             <span asp-validation-for="Reservation.PhoneNumber"></span>
         </div>
         <div class="form-field create-form-field">
+            <label asp-for="Reservation.PartySize" class="form-label"></label>
+            <input asp-for="Reservation.PartySize" class="form-data party-size-input" 
+                   oninput="onPartySizeInput(event)" />
+            <span asp-validation-for="Reservation.PartySize"></span>
+        </div>
+        <div class="form-field create-form-field">
             <label asp-for="Reservation.Date" class="form-label"></label>
             <input asp-for="Reservation.Date" class="form-data date-input-field" autocomplete="off"
                    onfocus="onDateInputFocus(event)" onblur="onDateInputBlur(event)" oninput="onDateInput(event)"/>
@@ -31,7 +37,7 @@
         </div>
         <div class="form-field create-form-field">
             <label asp-for="Reservation.TimeSlot" class="form-label"></label>
-            <select asp-for="Reservation.TimeSlot" class="form-data" oninput="onTimeSlotInput(event)">
+            <select asp-for="Reservation.TimeSlot" class="form-data time-slot-input" oninput="onTimeSlotInput(event)">
                 <option value="">Select time</option>
 @{
     TimeOnly startTime = new TimeOnly(12,00);
@@ -43,11 +49,6 @@
 }
             </select>
             <span asp-validation-for="Reservation.TimeSlot"></span>
-        </div>
-        <div class="form-field create-form-field">
-            <label asp-for="Reservation.PartySize" class="form-label"></label>
-            <input asp-for="Reservation.PartySize" class="form-data party-size-input"/>
-            <span asp-validation-for="Reservation.PartySize"></span>
         </div>
         <div class="form-field create-form-field textarea-form-field">
             <label asp-for="Reservation.SpecialRequest" class="form-label"></label>

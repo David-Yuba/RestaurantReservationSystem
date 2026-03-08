@@ -7,6 +7,7 @@ using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using ReservationSys_LaMaisonRestaurant.Models;
 using System.ComponentModel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ReservationSys_LaMaisonRestaurant.Pages;
 
@@ -25,9 +26,17 @@ public class IndexModel : PageModel
         return Page();
     }
     [BindProperty(SupportsGet = true)]
+    public int? Size { get; set; }
+    [BindProperty(SupportsGet = true)]
     public DateOnly? Date { get; set; }
     [BindProperty(SupportsGet = true)]
-    public TimeOnly TimeSlot { get; set; }
+    public TimeOnly? TimeSlot { get; set; }
+    public IActionResult OnGetSize()
+    {
+        List<OccupancySlot> occupancySlots = ReturnOccupancySlots();
+
+        return new JsonResult(occupancySlots);
+    }
     public IActionResult OnGetDate()
     {
         List<OccupancySlot> occupancySlots = ReturnOccupancySlots();
@@ -39,6 +48,8 @@ public class IndexModel : PageModel
         int maximumPartySize = CalulateMaximumPartySize();
         return new JsonResult(maximumPartySize);
     }
+    
+    
     [BindProperty]
     public Reservation Reservation { get; set; } = default!;
     public async Task<IActionResult> OnPostAsync()
