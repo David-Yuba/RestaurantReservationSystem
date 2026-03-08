@@ -83,7 +83,7 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
         public bool IsSlotFull(DateOnly date, TimeOnly time)
         {
             var sumOfPeopleOnSameDateTime = (from r in _context.Reservation
-                                             where r.Date == date && r.TimeSlot == time
+                                             where r.Date == date && r.TimeSlot == time && r.IsPrivateDining == false
                                              select r.PartySize).Sum();
 
             if (sumOfPeopleOnSameDateTime >= 20)
