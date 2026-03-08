@@ -109,6 +109,7 @@ public class IndexModel : PageModel
         int maximumTimeSlotOccupancy = 20;
 
         var reservations = from r in _context.Reservation
+                           where r.IsPrivateDining == false
                            select r;
 
         reservations = reservations.Where(res => res.TimeSlot == TimeSlot);
@@ -120,8 +121,9 @@ public class IndexModel : PageModel
     }
     private List<OccupancySlot> ReturnOccupancySlots()
     {
-        var reservations = from m in _context.Reservation
-                           select m;
+        var reservations = from r in _context.Reservation
+                           where r.IsPrivateDining == false
+                           select r;
         reservations = reservations.Where(res => res.Date == Date);
         List<OccupancySlot> occupancy = reservations.ToList()
             .Select(res => new OccupancySlot(res.TimeSlot, res.PartySize))
@@ -146,7 +148,7 @@ public class IndexModel : PageModel
     private int ReturnOccupancySum()
     {
         var occupancySum = from r in _context.Reservation
-                           where (r.Date == Reservation.Date) && (r.TimeSlot == Reservation.TimeSlot)
+                           where (r.Date == Reservation.Date) && (r.TimeSlot == Reservation.TimeSlot) && r.IsPrivateDining == false
                            select r.PartySize;
         int sum = 0;
         foreach (var PartySize in occupancySum)

@@ -102,9 +102,22 @@ function onPrivateDiningChange() {
         if (partySizeInputEl.value) $(partySizeInputEl).valid();
     }
     else {
+        const partySizeInputEl = document.getElementsByClassName("party-size-input")[0];
+        const form = document.getElementsByClassName("create-form")[0];
+
+        $(form).removeData('validator');
+        $(form).removeData('unobtrusiveValidation');
+
+        partySizeInputEl.setAttribute('data-val-range-min', `${0}`);
+        partySizeInputEl.setAttribute('data-val-range-max', `${10}`);
+        partySizeInputEl.setAttribute('data-val-range', `The field PartySize must be between 0 and 10.`);
+
+        $.validator.unobtrusive.parse(form);
+
         timeSlotOptionEls.forEach(function (el) {
             el.classList.remove("hidden"); 
         });
+        if (partySizeInputEl.value) $(partySizeInputEl).valid();
     }
 }
 
