@@ -35,7 +35,7 @@ public static class SeedData
                     PartySize = 2,
                     IsPrivateDining = false
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Confirmed",
                     ReferenceCode = "DEF456",
@@ -48,7 +48,7 @@ public static class SeedData
                     PartySize = 4,
                     IsPrivateDining = true
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Cancelled",
                     ReferenceCode = "GHI789",
@@ -61,7 +61,7 @@ public static class SeedData
                     PartySize = 3,
                     IsPrivateDining = false
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Pending",
                     ReferenceCode = "JKL012",
@@ -74,7 +74,7 @@ public static class SeedData
                     PartySize = 6,
                     IsPrivateDining = true
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Pending",
                     ReferenceCode = "MNO345",
@@ -87,7 +87,7 @@ public static class SeedData
                     PartySize = 5,
                     IsPrivateDining = false
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Confirmed",
                     ReferenceCode = "PQR678",
@@ -100,7 +100,7 @@ public static class SeedData
                     PartySize = 2,
                     IsPrivateDining = false
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Pending",
                     ReferenceCode = "STU901",
@@ -113,7 +113,7 @@ public static class SeedData
                     PartySize = 8,
                     IsPrivateDining = true
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Cancelled",
                     ReferenceCode = "VWX234",
@@ -126,7 +126,7 @@ public static class SeedData
                     PartySize = 3,
                     IsPrivateDining = false
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Confirmed",
                     ReferenceCode = "YZA567",
@@ -139,7 +139,7 @@ public static class SeedData
                     PartySize = 6,
                     IsPrivateDining = true
                 },
-            new Reservation
+                new Reservation
                 {
                     Status = "Pending",
                     ReferenceCode = "BCD890",
@@ -150,6 +150,71 @@ public static class SeedData
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(6)),
                     TimeSlot = new TimeOnly(18, 30),
                     PartySize = 4,
+                    IsPrivateDining = false
+                },
+                new Reservation
+                {
+                    Status = "Pending",
+                    ReferenceCode = "LMN234",
+                    FullName = "Sophie Carter",
+                    Email = "sophie.carter@example.com",
+                    PhoneNumber = "555-234-1111",
+                    SpecialRequest = "Near the entrance.",
+                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    TimeSlot = new TimeOnly(18, 0),
+                    PartySize = 2,
+                    IsPrivateDining = false
+                },
+                new Reservation
+                {
+                    Status = "Pending",
+                    ReferenceCode = "OPQ567",
+                    FullName = "Liam Walker",
+                    Email = "liam.walker@example.com",
+                    PhoneNumber = "555-345-2222",
+                    SpecialRequest = "Table with a view.",
+                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    TimeSlot = new TimeOnly(18, 0),
+                    PartySize = 2,
+                    IsPrivateDining = false
+                },
+                new Reservation
+                {
+                    Status = "Pending",
+                    ReferenceCode = "RST890",
+                    FullName = "Mia Evans",
+                    Email = "mia.evans@example.com",
+                    PhoneNumber = "555-456-3333",
+                    SpecialRequest = "No special requests.",
+                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    TimeSlot = new TimeOnly(18, 0),
+                    PartySize = 2,
+                    IsPrivateDining = false
+                },
+                new Reservation
+                {
+                    Status = "Pending",
+                    ReferenceCode = "UVW123",
+                    FullName = "Noah Scott",
+                    Email = "noah.scott@example.com",
+                    PhoneNumber = "555-567-4444",
+                    SpecialRequest = "Prefer booth seating.",
+                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    TimeSlot = new TimeOnly(18, 0),
+                    PartySize = 2,
+                    IsPrivateDining = false
+                },
+                new Reservation
+                {
+                    Status = "Pending",
+                    ReferenceCode = "XYZ456",
+                    FullName = "Olivia King",
+                    Email = "olivia.king@example.com",
+                    PhoneNumber = "555-678-5555",
+                    SpecialRequest = "Close to the bar.",
+                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    TimeSlot = new TimeOnly(18, 0),
+                    PartySize = 5,
                     IsPrivateDining = false
                 }
             );

@@ -50,7 +50,7 @@
     TimeOnly endTime = new TimeOnly(22,00);
 
     for (TimeOnly i=startTime ; i < endTime.AddMinutes(-30) ; i = i.AddMinutes(30)){
-                <option value="@i" class="time-slot-option">@i</option>
+                <option value="@i" class="time-slot-option">@(i.ToString("HH:mm"))</option>
     }
 }
             </select>
@@ -77,23 +77,22 @@
         <div tabindex="0" class="month-year" month-year>@today.ToString("MMMM") - @today.Year</div>
 }
         <div class="date-table-days">
-            <div tabindex="0" class="day-name" day-name>Su</div>
             <div tabindex="0" class="day-name" day-name>Mo</div>
             <div tabindex="0" class="day-name" day-name>Tu</div>
             <div tabindex="0" class="day-name" day-name>We</div>
             <div tabindex="0" class="day-name" day-name>Th</div>
             <div tabindex="0" class="day-name" day-name>Fr</div>
             <div tabindex="0" class="day-name" day-name>Sa</div>
+            <div tabindex="0" class="day-name" day-name>Su</div>
 @{
     DateOnly todaysDate = DateOnly.FromDateTime(DateTime.Now);
-    for(DayOfWeek i=DayOfWeek.Sunday ; i<todaysDate.DayOfWeek ; i++) {
+    for(DayOfWeek i=DayOfWeek.Monday ; i < (todaysDate.DayOfWeek != DayOfWeek.Sunday ? todaysDate.DayOfWeek : DayOfWeek.Saturday + 1) ; i++) {
             <div tabindex="0" class="day-name" day-name></div>
     }
     for (int i=0 ; i<30 ; i++){
-            <div tabindex="0" date-value ="@todaysDate.ToString("MM-dd-yy")">@todaysDate.Day</div>
+                    <div tabindex="0" date-value="@(todaysDate.ToString("dd-MM-yy"))">@(todaysDate.Day)</div>
         todaysDate = todaysDate.AddDays(1);
     }
-
 }
 
         </div>

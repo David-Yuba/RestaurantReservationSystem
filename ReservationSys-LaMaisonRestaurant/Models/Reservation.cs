@@ -18,8 +18,9 @@ public class Reservation
     [Required]
     public string PhoneNumber { get; set; } = string.Empty;
 
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateOnly Date { get; set; }
-
+    [DisplayFormat(DataFormatString = "{0:HH:mm}")]
     public TimeOnly TimeSlot { get; set; }
 
     [Range(0,10)]

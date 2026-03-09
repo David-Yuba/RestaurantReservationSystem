@@ -135,7 +135,7 @@ if (IS_PRIVATE_DINING) {
 }
 
     try {
-        const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
+        const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${reformatDateString(dateInputEl.value)}&TimeSlot=${timeSlotInputEl.value}`)
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
@@ -178,7 +178,7 @@ async function onDateInput(event) {
     const timeSlotInputEl = document.getElementsByClassName("time-slot-input")[0];
 
     if (!partySizeInputEl || !dateInputEl || !timeSlotInputEl) return;
-    const selectedDay = new Date(dateInputEl.value).getDay();
+    const selectedDay = new Date(reformatDateString(dateInputEl.value)).getDay();
 
     if (selectedDay == 5 || selectedDay == 6) {
         const privateDiningFieldEl = document.getElementsByClassName("private-dining-field")[0];
@@ -197,7 +197,7 @@ if (IS_PRIVATE_DINING) {
 }
 
     try {
-        const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
+        const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${reformatDateString(dateInputEl.value)}&TimeSlot=${timeSlotInputEl.value}`)
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
@@ -246,7 +246,7 @@ if (IS_PRIVATE_DINING) {
 }
 
     try {
-        const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
+        const response = await fetch(`${url}?handler=Size&PartySize=${partySizeInputEl.value}&Date=${reformatDateString(dateInputEl.value) }&TimeSlot=${timeSlotInputEl.value}`)
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
@@ -281,6 +281,10 @@ if (IS_PRIVATE_DINING) {
     }
 }
 
+function reformatDateString(d) {
+    const [date, month, year] = d.split("-");
+    return `${month}-${date}-${year}`;
+}
 function reformatTimeString(time) {
     const [hours, minutes] = time.split(':');
     return `${hours-12}:${minutes} PM`
@@ -318,9 +322,10 @@ if (IS_PRIVATE_DINING) {
     }
 }
 
+
 async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
     try {
-        const response = await fetch(`${url}?handler=PrivateDining&Date=${dateInputEl.value}&TimeSlot=${timeSlotInputEl.value}`)
+        const response = await fetch(`${url}?handler=PrivateDining&Date=${reformatDateString(dateInputEl.value) }&TimeSlot=${timeSlotInputEl.value}`)
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
