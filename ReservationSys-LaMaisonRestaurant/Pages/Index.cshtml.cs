@@ -13,11 +13,9 @@ namespace ReservationSys_LaMaisonRestaurant.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
     private readonly ReservationSys_LaMaisonRestaurant.Data.ReservationSys_LaMaisonRestaurantContext _context;
-    public IndexModel(ILogger<IndexModel> logger, ReservationSys_LaMaisonRestaurant.Data.ReservationSys_LaMaisonRestaurantContext context)
+    public IndexModel(ReservationSys_LaMaisonRestaurant.Data.ReservationSys_LaMaisonRestaurantContext context)
     {
-        _logger = logger;
         _context = context;
     }
 

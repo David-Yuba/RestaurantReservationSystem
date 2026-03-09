@@ -2,5 +2,6 @@
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
+  <Project Path="ReservationSys-LaMaisonRestaurant.test/ReservationSys-LaMaisonRestaurant.test.csproj" />
   <Project Path="ReservationSys-LaMaisonRestaurant/ReservationSys-LaMaisonRestaurant.csproj" />
 </Solution>
