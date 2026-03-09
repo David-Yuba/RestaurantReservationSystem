@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ReservationSys-LaMaisonRestaurant.test": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

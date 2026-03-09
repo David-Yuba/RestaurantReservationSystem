@@ -11,19 +11,32 @@ namespace ReservationSys_LaMaisonRestaurant.test;
 
 public class IndexModelTests
 {
-    private ReservationSys_LaMaisonRestaurantContext CreateInMemoryContext()
+    private ReservationSys_LaMaisonRestaurantContext CreateDatabaseContext()
     {
+        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        string connectionString;
+
+        if (env == "Production")
+        {
+            connectionString = "Server=db,1433;Database=ReservationSys_LaMaisonRestaurantContext-850da8c0-aea8-406c-aa63-e086e40a9c01;User Id=sa;Password=ASDkjkfsjd@.DKfj23dk;TrustServerCertificate=True";
+        }
+        else
+        {
+            connectionString = "Server=(localdb)\\mssqllocaldb;Database=ReservationSys_LaMaisonRestaurantContext-Dev;Trusted_Connection=True;MultipleActiveResultSets=true";
+        }
+
         var options = new DbContextOptionsBuilder<ReservationSys_LaMaisonRestaurantContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseSqlServer(connectionString)
             .Options;
+
         return new ReservationSys_LaMaisonRestaurantContext(options);
     }
 
-[Fact]
+    [Fact]
     public async Task OnPostAsync_InvalidModelState_ReturnsPage()
     {
         // Arrange
-        var context = CreateInMemoryContext();
+        var context = CreateDatabaseContext();
         var model = new IndexModel(context);
         model.ModelState.AddModelError("Reservation.Name", "Name is required");
 
@@ -37,16 +50,20 @@ public class IndexModelTests
     public async Task OnPostAsync_InvalidStatus_ReturnsPage()
     {
         // Arrange
-        var context = CreateInMemoryContext();
+        var context = CreateDatabaseContext();
         var model = new IndexModel(context);
 
         model.Reservation = new Reservation
         {
-            Status = "Confirmed", // Invalid status
+            Status = "Confirmed",
             ReferenceCode = "defaultValue",
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
+            FullName = "Alice Johnson",
+            Email = "alice.johnson@example.com",
+            PhoneNumber = "555-123-4567",
+            SpecialRequest = "Window seat, please.",
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
             TimeSlot = new TimeOnly(18, 0),
-            PartySize = 4,
+            PartySize = 2,
             IsPrivateDining = false
         };
 
@@ -61,16 +78,20 @@ public class IndexModelTests
     public async Task OnPostAsync_DateInPast_ReturnsPage()
     {
         // Arrange
-        var context = CreateInMemoryContext();
+        var context = CreateDatabaseContext();
         var model = new IndexModel(context);
 
         model.Reservation = new Reservation
         {
             Status = "Pending",
             ReferenceCode = "defaultValue",
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(-1)), // Past date
+            FullName = "Alice Johnson",
+            Email = "alice.johnson@example.com",
+            PhoneNumber = "555-123-4567",
+            SpecialRequest = "Window seat, please.",
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(-2)),
             TimeSlot = new TimeOnly(18, 0),
-            PartySize = 4,
+            PartySize = 2,
             IsPrivateDining = false
         };
 
@@ -85,16 +106,20 @@ public class IndexModelTests
     public async Task OnPostAsync_DateTooFarInFuture_ReturnsPage()
     {
         // Arrange
-        var context = CreateInMemoryContext();
+        var context = CreateDatabaseContext();
         var model = new IndexModel(context);
 
         model.Reservation = new Reservation
         {
             Status = "Pending",
             ReferenceCode = "defaultValue",
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(35)), // Beyond 29 days
+            FullName = "Alice Johnson",
+            Email = "alice.johnson@example.com",
+            PhoneNumber = "555-123-4567",
+            SpecialRequest = "Window seat, please.",
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(35)),
             TimeSlot = new TimeOnly(18, 0),
-            PartySize = 4,
+            PartySize = 2,
             IsPrivateDining = false
         };
 
@@ -109,17 +134,20 @@ public class IndexModelTests
     public async Task OnPostAsync_ValidReservation_RedirectsToSuccessPage()
     {
         // Arrange
-        using var context = CreateInMemoryContext();
+        using var context = CreateDatabaseContext();
         var model = new IndexModel(context);
 
         model.Reservation = new Reservation
         {
-            Id = 1,
             Status = "Pending",
             ReferenceCode = "defaultValue",
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
+            FullName = "Alice Johnson",
+            Email = "alice.johnson@example.com",
+            PhoneNumber = "555-123-4567",
+            SpecialRequest = "Window seat, please.",
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(17)),
             TimeSlot = new TimeOnly(18, 0),
-            PartySize = 4,
+            PartySize = 2,
             IsPrivateDining = false
         };
 
