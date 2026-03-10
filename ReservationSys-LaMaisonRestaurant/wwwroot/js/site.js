@@ -75,7 +75,7 @@ function onReservationClick(id) {
     const detailsButton = document.getElementById(`${id}`);
     detailsButton.click();
 }
-function onPrivateDiningChange() {
+function onPrivateDiningInput() {
     IS_PRIVATE_DINING = !IS_PRIVATE_DINING;
     const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
 
@@ -92,7 +92,7 @@ function onPrivateDiningChange() {
 
         $.validator.unobtrusive.parse(form);
 
-        const privateDiningTimeSlots = ["6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM", "9:00 PM"]
+        const privateDiningTimeSlots = ["18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00"]
         timeSlotOptionEls.forEach(function (el) {
             if (privateDiningTimeSlots.some((slot) => slot == el.value)) {
                 el.classList.remove("hidden");
@@ -140,16 +140,17 @@ if (IS_PRIVATE_DINING) {
             throw new Error(`Response status: ${response.status}`);
         }
         let occupancyList = await response.json();
-
+        
         const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
 
         timeSlotOptionEls.forEach(function (el) {
-            if (occupancyList.some(slot => reformatStringDate(slot.timeSlot) == el.value)) {
-                el.classList.add("hidden");
-            }
-            else el.classList.remove("hidden")
-        });
+            let maxPeople = timeSlotIsNotFull(occupancyList, el, partySizeInputEl.value);
 
+            if ((partySizeInputEl.value ? parseInt(partySizeInputEl.value) : 0) <= maxPeople) {
+                el.classList.remove("hidden");
+            }
+            else el.classList.add("hidden");
+        });
 
         const newMaxPartySize = getNewMaxPartySize(occupancyList, timeSlotInputEl.value);
         const form = document.getElementsByClassName("create-form")[0];
@@ -165,7 +166,7 @@ if (IS_PRIVATE_DINING) {
 
         if (partySizeInputEl.value) $(partySizeInputEl).valid();
         if (timeSlotInputEl.value) {
-            isCurrentValueValid(timeSlotInputEl, occupancyList);
+            isCurrentValueValid(timeSlotInputEl, occupancyList, partySizeInputEl.value);
         }
     } catch (error) {
         console.error(error.message);
@@ -179,15 +180,16 @@ async function onDateInput(event) {
 
     if (!partySizeInputEl || !dateInputEl || !timeSlotInputEl) return;
     const selectedDay = new Date(reformatDateString(dateInputEl.value)).getDay();
-
+    const privateDiningFieldEl = document.getElementsByClassName("private-dining-field")[0];
     if (selectedDay == 5 || selectedDay == 6) {
-        const privateDiningFieldEl = document.getElementsByClassName("private-dining-field")[0];
         privateDiningFieldEl.classList.remove("hidden");
     }
     else {
-        const privateDiningFieldEl = document.getElementsByClassName("private-dining-field")[0];
+        const privateDiningFieldIn = document.getElementsByClassName("private-dining-input")[0];
         privateDiningFieldEl.classList.add("hidden");
-        if (IS_PRIVATE_DINING) privateDiningFieldEl.click();
+        if (IS_PRIVATE_DINING) {
+            privateDiningFieldIn.click();
+        }
     }
 
 if (IS_PRIVATE_DINING) {
@@ -206,7 +208,7 @@ if (IS_PRIVATE_DINING) {
 
         timeSlotOptionEls.forEach(function (el) {
             let maxPeople = timeSlotIsNotFull(occupancyList, el, partySizeInputEl.value);
-            if (maxPeople > 0 && maxPeople < 20) {
+            if (parseInt(partySizeInputEl.value) <= maxPeople) {
                 el.classList.remove("hidden");
             }
             else el.classList.add("hidden");
@@ -225,7 +227,7 @@ if (IS_PRIVATE_DINING) {
 
         if (partySizeInputEl.value) $(partySizeInputEl).valid();
         if (timeSlotInputEl.value) {
-            isCurrentValueValid(timeSlotInputEl, occupancyList);
+            isCurrentValueValid(timeSlotInputEl, occupancyList, partySizeInputEl.value);
         }
     } catch (error) {
         console.error(error.message);
@@ -251,15 +253,6 @@ if (IS_PRIVATE_DINING) {
             throw new Error(`Response status: ${response.status}`);
         }
         const occupancyList = await response.json();
-        const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
-
-        timeSlotOptionEls.forEach(function (el) {
-            let maxPeople = timeSlotIsNotFull(occupancyList, el, partySizeInputEl.value);
-            if (maxPeople > 0 && maxPeople < 20) {
-                el.classList.remove("hidden");
-            }
-            else el.classList.add("hidden");
-        });
 
         const newMaxPartySize = getNewMaxPartySize(occupancyList, timeSlotInputEl.value);
         const form = document.getElementsByClassName("create-form")[0];
@@ -274,7 +267,7 @@ if (IS_PRIVATE_DINING) {
 
         if (partySizeInputEl.value) $(partySizeInputEl).valid();
         if (timeSlotInputEl.value) {
-            isCurrentValueValid(timeSlotInputEl, occupancyList);
+            isCurrentValueValid(timeSlotInputEl, occupancyList, partySizeInputEl.value);
         }
     } catch (error) {
         console.error(error.message);
@@ -287,10 +280,11 @@ function reformatDateString(d) {
 }
 function reformatTimeString(time) {
     const [hours, minutes] = time.split(':');
-    return `${hours-12}:${minutes} PM`
+    return `${hours}:${minutes}`
 }
 function timeSlotIsNotFull(occupancyList, el, partySize) {
     let occupancySlot = occupancyList.find(slot => reformatTimeString(slot.timeSlot) == el.value);
+
     if (!occupancySlot || occupancySlot.partySize <= 10) return 10;
 
     let newMaxPartySize = 20 - occupancySlot.partySize;
@@ -303,7 +297,7 @@ function getNewMaxPartySize(occupancyList, timeSlot) {
 
     return 20 - parseInt(occupancySlot.partySize);
 }
-function isCurrentValueValid(el, occupancyList) {
+function isCurrentValueValid(el, occupancyList, partySize) {
 
 if (IS_PRIVATE_DINING) {
     if (occupancyList.some(slot => reformatTimeString(slot) == el.value)) {
@@ -313,10 +307,11 @@ if (IS_PRIVATE_DINING) {
     return;
 }
 
-    const timeSlot = occupancyList.find(v => reformatTimeString(v.timeSlot) == el.value);
+    const timeSlot = occupancyList.find(occupancySlot => reformatTimeString(occupancySlot.timeSlot) == el.value);
+    console.log(el);
     if (timeSlot) {
         let newMaxPartySize = 20 - timeSlot.partySize;
-        if (newMaxPartySize < parseInt(el.value)) {
+        if (newMaxPartySize < parseInt(partySize)) {
             el.value = "";
         }
     }
@@ -330,10 +325,9 @@ async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
             throw new Error(`Response status: ${response.status}`);
         }
         let occupancyList = await response.json();
-        console.log(occupancyList);
         const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
 
-        const privateDiningTimeSlots = ["6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM", "9:00 PM"]
+        const privateDiningTimeSlots = ["18:00:00", "18:30:00", "19:00:00", "19:30:00", "20:00:00", "20:30:00", "21:00:00"]
         timeSlotOptionEls.forEach(function (el) {
             if (occupancyList.some(slot => reformatTimeString(slot) == el.value)) {
                 el.classList.add("hidden");
@@ -344,7 +338,7 @@ async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
 
         if (partySizeInputEl.value) $(partySizeInputEl).valid();
         if (timeSlotInputEl.value) {
-            isCurrentValueValid(timeSlotInputEl, occupancyList);
+            isCurrentValueValid(timeSlotInputEl, occupancyList, 0);
         }
     } catch (error) {
         console.error(error.message);
