@@ -172,4 +172,10 @@ public class IndexModel : PageModel
             PartySize = s;
         }
     };
+    private DateOnly ReformatFormDate(DateOnly date)
+    {
+        string stringDate = date.ToString("dd/MM/yyyy");
+        DateOnly reformatedDate = DateOnly.ParseExact(stringDate, "MM/dd/yyyy");
+        return reformatedDate;
+    }
 }

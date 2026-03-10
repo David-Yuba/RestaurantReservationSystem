@@ -6,7 +6,7 @@
 }
 <div class = "page">
     <h1>Create a Reservation</h1>
-    <form method="post" asp-page="Index" class="create-form">
+    <form method="post" asp-page="Index" class="create-form" onsubmit="reformatData(event)">
         <div asp-validation-summary="ModelOnly"></div>
         <div class="form-field create-form-field">
             <label asp-for="Reservation.FullName" class="form-label"></label>

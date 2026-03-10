@@ -308,7 +308,6 @@ if (IS_PRIVATE_DINING) {
 }
 
     const timeSlot = occupancyList.find(occupancySlot => reformatTimeString(occupancySlot.timeSlot) == el.value);
-    console.log(el);
     if (timeSlot) {
         let newMaxPartySize = 20 - timeSlot.partySize;
         if (newMaxPartySize < parseInt(partySize)) {
@@ -343,4 +342,12 @@ async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
     } catch (error) {
         console.error(error.message);
     }
+}
+function reformatData() {
+    const dateInputEl = document.getElementsByClassName("date-input-field")[0];
+    let [day, month, year] = dateInputEl.value.split('-');
+    dateInputEl.value = `${month}-${day}-${year}`;
+    setTimeout(function () {
+        dateInputEl.value = `${day}-${month}-${year}`;
+    }, 1)
 }
