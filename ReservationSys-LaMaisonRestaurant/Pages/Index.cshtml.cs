@@ -69,6 +69,10 @@ public class IndexModel : PageModel
         {
             return Page();
         }
+        if (!isValidTimeSlot(Reservation.TimeSlot))
+        {
+            return Page();
+        }
 
         int uniqueCode = Guid.NewGuid().ToString().GetHashCode();
         Reservation.ReferenceCode = $"LM-{uniqueCode.ToString("X")[0..5]}";
@@ -172,10 +176,23 @@ public class IndexModel : PageModel
             PartySize = s;
         }
     };
-    private DateOnly ReformatFormDate(DateOnly date)
+    private bool isValidTimeSlot(TimeOnly timeSlot)
     {
-        string stringDate = date.ToString("dd/MM/yyyy");
-        DateOnly reformatedDate = DateOnly.ParseExact(stringDate, "MM/dd/yyyy");
-        return reformatedDate;
+        List<TimeOnly> validTimeslots;
+        if (!Reservation.IsPrivateDining)
+            validTimeslots =
+                [new TimeOnly(12, 00), new TimeOnly(12, 30), new TimeOnly(13, 00), new TimeOnly(13, 30),
+                new TimeOnly(14, 00), new TimeOnly(14, 30), new TimeOnly(15, 00), new TimeOnly(15, 30),
+                new TimeOnly(16, 00), new TimeOnly(16, 30), new TimeOnly(17, 00), new TimeOnly(17, 30),
+                new TimeOnly(18, 00), new TimeOnly(18, 30), new TimeOnly(19, 00), new TimeOnly(19, 30),
+                new TimeOnly(20, 00), new TimeOnly(20, 30), new TimeOnly(21, 00)];
+        else validTimeslots =
+                [new TimeOnly(16, 00), new TimeOnly(16, 30), new TimeOnly(17, 00), new TimeOnly(17, 30),
+                new TimeOnly(18, 00), new TimeOnly(18, 30), new TimeOnly(19, 00), new TimeOnly(19, 30),
+                new TimeOnly(20, 00), new TimeOnly(20, 30), new TimeOnly(21, 00)];
+
+        bool isValid = validTimeslots.Contains(timeSlot);
+
+        return isValid;
     }
 }
