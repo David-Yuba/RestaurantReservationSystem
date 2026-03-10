@@ -40,5 +40,18 @@ services:
         interval: 10s
         timeout: 5s
         retries: 5
+  reservationsys-lamaisonrestaurant.test:
+    image: ${DOCKER_REGISTRY-}reservationsyslamaisonrestauranttest
+    build:
+      context: .
+      dockerfile: ReservationSys-LaMaisonRestaurant.test/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+      reservationsys-lamaisonrestaurant:
+        condition: service_healthy
+    environment:
+      - ReservationSys_LaMaisonRestaurantContext=Server=db,1433;Database=ReservationSys_LaMaisonRestaurantContext-850da8c0-aea8-406c-aa63-e086e40a9c01;User Id=sa;Password=ASDkjkfsjd@.DKfj23dk;TrustServerCertificate=True
 volumes:
   sqldata:
+

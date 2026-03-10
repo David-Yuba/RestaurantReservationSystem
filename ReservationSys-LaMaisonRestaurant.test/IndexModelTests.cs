@@ -14,16 +14,9 @@ public class IndexModelTests
     private ReservationSys_LaMaisonRestaurantContext CreateDatabaseContext()
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        string connectionString;
+        // string connectionString = "Server=db,1433;Database=ReservationSys_LaMaisonRestaurantContext-850da8c0-aea8-406c-aa63-e086e40a9c01;User Id=sa;Password=ASDkjkfsjd@.DKfj23dk;TrustServerCertificate=True";
+        string connectionString = "Server=(localdb)\\mssqllocaldb;Database=ReservationSys_LaMaisonRestaurantContext-850da8c0-aea8-406c-aa63-e086e40a9c01;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-        if (env == "Production")
-        {
-            connectionString = "Server=db,1433;Database=ReservationSys_LaMaisonRestaurantContext-850da8c0-aea8-406c-aa63-e086e40a9c01;User Id=sa;Password=ASDkjkfsjd@.DKfj23dk;TrustServerCertificate=True";
-        }
-        else
-        {
-            connectionString = "Server=(localdb)\\mssqllocaldb;Database=ReservationSys_LaMaisonRestaurantContext-Dev;Trusted_Connection=True;MultipleActiveResultSets=true";
-        }
 
         var options = new DbContextOptionsBuilder<ReservationSys_LaMaisonRestaurantContext>()
             .UseSqlServer(connectionString)
