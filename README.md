@@ -11,8 +11,13 @@ Git is optional but allows for downloading the app source code from the command 
 ### Before following the steps make sure you have:
 1. Docker installed and running: [Docker desktop](https://www.docker.com/products/docker-desktop/)
    Download the latest version for your operating system and processor architecture
-2. Run Docker after it is installed
-3. Install git: [Git](https://git-scm.com/install/) (Optional step)
+2. Docker compose version: v5.0.2, check it with:
+```powershell
+## Check docker compose version
+docker compose version
+```
+4. Run Docker after it is installed
+5. Install git: [Git](https://git-scm.com/install/) (Optional step)
 ### How to run
 1. Start by opening a command line interface of your choice (both linux or windows work)
 2. Once you are positioned into the directory in which you wish to download the source code enter the following command:
