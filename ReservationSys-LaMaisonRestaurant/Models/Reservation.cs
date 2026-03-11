@@ -23,7 +23,7 @@ public class Reservation
     [DisplayFormat(DataFormatString = "{0:HH:mm}")]
     public TimeOnly TimeSlot { get; set; }
 
-    [Range(0,10)]
+    [Range(0,12)]
     public int PartySize { get; set; }
 
     [StringLength(500)]

@@ -76,8 +76,11 @@ function onReservationClick(id) {
     detailsButton.click();
 }
 function onPrivateDiningInput() {
-    IS_PRIVATE_DINING = !IS_PRIVATE_DINING;
+    const url = window.location.href;
     const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
+    const dateInputEl = document.getElementsByClassName("date-input-field")[0];
+    const timeSlotInputEl = document.getElementsByClassName("time-slot-input")[0];
+    IS_PRIVATE_DINING = !IS_PRIVATE_DINING;
 
     if (IS_PRIVATE_DINING) {
         const partySizeInputEl = document.getElementsByClassName("party-size-input")[0];
@@ -99,6 +102,7 @@ function onPrivateDiningInput() {
             }
             else el.classList.add("hidden")
         });
+        updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl)
         if (partySizeInputEl.value) $(partySizeInputEl).valid();
     }
     else {
@@ -208,7 +212,7 @@ if (IS_PRIVATE_DINING) {
 
         timeSlotOptionEls.forEach(function (el) {
             let maxPeople = timeSlotIsNotFull(occupancyList, el, partySizeInputEl.value);
-            if (parseInt(partySizeInputEl.value) <= maxPeople) {
+            if ((parseInt(partySizeInputEl.value) ? parseInt(partySizeInputEl.value) : 0 ) <= maxPeople) {
                 el.classList.remove("hidden");
             }
             else el.classList.add("hidden");
@@ -315,7 +319,6 @@ if (IS_PRIVATE_DINING) {
         }
     }
 }
-
 
 async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
     try {

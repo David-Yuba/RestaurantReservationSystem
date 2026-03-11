@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Build.Logging;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using ReservationSys_LaMaisonRestaurant.Models;
@@ -88,8 +90,8 @@ public class IndexModel : PageModel
             if (Reservation.PartySize < 6 || Reservation.PartySize > 12)
                 return Page();
 
+            _context.Reservation.Add(Reservation);
             await _context.SaveChangesAsync();
-
             return RedirectToPage("SuccessfulReservation", new { id = Reservation.Id });
         }
 
@@ -187,8 +189,7 @@ public class IndexModel : PageModel
                 new TimeOnly(18, 00), new TimeOnly(18, 30), new TimeOnly(19, 00), new TimeOnly(19, 30),
                 new TimeOnly(20, 00), new TimeOnly(20, 30), new TimeOnly(21, 00)];
         else validTimeslots =
-                [new TimeOnly(16, 00), new TimeOnly(16, 30), new TimeOnly(17, 00), new TimeOnly(17, 30),
-                new TimeOnly(18, 00), new TimeOnly(18, 30), new TimeOnly(19, 00), new TimeOnly(19, 30),
+                [new TimeOnly(18, 00), new TimeOnly(18, 30), new TimeOnly(19, 00), new TimeOnly(19, 30),
                 new TimeOnly(20, 00), new TimeOnly(20, 30), new TimeOnly(21, 00)];
 
         bool isValid = validTimeslots.Contains(timeSlot);

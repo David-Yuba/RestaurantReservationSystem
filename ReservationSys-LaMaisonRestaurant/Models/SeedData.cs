@@ -45,7 +45,7 @@ public static class SeedData
                     SpecialRequest = "High chair for toddler.",
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
                     TimeSlot = new TimeOnly(19, 30),
-                    PartySize = 4,
+                    PartySize = 8,
                     IsPrivateDining = true
                 },
                 new Reservation
@@ -70,7 +70,7 @@ public static class SeedData
                     PhoneNumber = "555-456-7890",
                     SpecialRequest = "Celebrating birthday.",
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(7)),
-                    TimeSlot = new TimeOnly(17, 0),
+                    TimeSlot = new TimeOnly(20, 0),
                     PartySize = 6,
                     IsPrivateDining = true
                 },
