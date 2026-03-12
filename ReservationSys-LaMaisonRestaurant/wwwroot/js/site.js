@@ -3,16 +3,47 @@
 document.addEventListener("DOMContentLoaded", main);
 window.addEventListener("resize", main);
 
+function positionLegendTableAndButton() {
+    const legendTable = document.getElementsByClassName("legend-table")[0];
+    const legendButton = document.getElementsByClassName("legend-button")[0];
+    if (!legendTable || !legendButton) return;
+
+    const buttonWidth = legendTable.getBoundingClientRect().width;
+    const buttonHeight = legendTable.getBoundingClientRect().height;
+    legendButton.style.width = `${buttonWidth}px`
+
+    const tableTop = legendButton.getBoundingClientRect().top;
+    const tableLeft = legendButton.getBoundingClientRect().left;
+    legendTable.style.top = `${tableTop + legendButton.getBoundingClientRect().height}px`
+    legendTable.style.left = `${tableLeft}px`;
+    
+}
 function setTableColumnWidth() {
-    let tableHeadings = Array.from(document.querySelectorAll("th"));
-    let tableData = Array.from(document.querySelectorAll("td"));
+    const tableHeadings = Array.from(document.querySelectorAll("th"));
+    const rightPadding = 32;
+    const tableData = Array.from(document.querySelectorAll("td"));
     if (tableHeadings.length == 0 || tableData.length == 0) return;
 
-    let highestWidth = tableData.map(element => element.getBoundingClientRect().width).reduce((highestValue, currentValue) => highestValue < currentValue ? currentValue : highestValue);
+    let columnWidths = [];
+    for (let i = 0; i < tableHeadings.length ; i++){
+        const tableHeadingWidth = tableHeadings[i].getBoundingClientRect().width;
+        for (let j=i ; j<tableData.length ; j+=tableHeadings.length+1){
+            const currentCellWidth = tableData[j].getBoundingClientRect().width;
+            if (columnWidths.length == i) columnWidths[i] = currentCellWidth;
+            else if (columnWidths[i] < currentCellWidth) columnWidths[i] = currentCellWidth;
+        }
+        if (columnWidths[i]<tableHeadingWidth)
+            columnWidths[i] = tableHeadingWidth;
+    }
 
-    tableHeadings.forEach(function (heading) {
-        heading.style.width = `${Math.ceil(highestWidth)}px`;
-    })
+    console.log(columnWidths);
+    for (let i = 0; i < tableHeadings.length; i++)
+        tableHeadings[i].style.width = `${Math.ceil(columnWidths[i]) + rightPadding}px`;
+
+    for (let i=0 ; i<tableData.length ; i++)
+        for (let j=i ; j<tableData.length ; j+=tableHeadings.length+1)
+            tableData[j].style.width = `${Math.ceil(columnWidths[i]) + rightPadding}px`;
+    
 }
 function setDateTableSizeAndPosition() {
     let tables = Array.from(document.querySelectorAll(".date-table"));
@@ -43,8 +74,18 @@ function setDateTableSizeAndPosition() {
 function main() {
     setTableColumnWidth();
     setDateTableSizeAndPosition();
+    positionLegendTableAndButton();
 }
+function onLegendClick() {
+    const legendTable = document.getElementsByClassName("legend-table")[0];
+    if (!legendTable) return;
 
+    legendTable.classList.toggle("invisible");
+}
+function onLegendBlur(event) {
+    const legendTable = document.getElementsByClassName("legend-table")[0];
+    legendTable.classList.add("invisible");
+}
 function onDateInputFocus(event) {
     event.preventDefault();
     let table = document.querySelector(".date-table");

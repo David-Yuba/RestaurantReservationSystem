@@ -4,8 +4,12 @@ html {
     --app-padding-y: 8px;
     --nav-links-gap: 16px;
     --form-gap: 4px;
-
     --background-color: white;
+    --private-dining-color: gold;
+    --cancelled-status-color: red;
+    --pending-status-color: black;
+    --completed-status-color: darkgreen;
+    --confirmed-status-color: green;
 }
 body {
     display: flex;

@@ -30,8 +30,9 @@
         </div>
         <input type="submit" value="Apply"/>
     </form>
-    <div>
+    <div class="extra-info">
         <h4>Expected number of guests: @Model.GuestNumber</h4>
+        <button onclick="onLegendClick(event)" onblur="onLegendBlur(event)" class="legend-button">Legend</button>
     </div>
     <h1>Reservations</h1>
     <table>
@@ -50,9 +51,6 @@
                     @Html.DisplayNameFor(model => model.Reservation[0].PhoneNumber)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Reservation[0].IsPrivateDining)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Reservation[0].Date)
                 </th>
                 <th>
@@ -66,7 +64,7 @@
         <tbody>
             @foreach (var item in Model.Reservation)
             {
-                <tr onclick="onReservationClick(@item.Id)">
+                <tr onclick="onReservationClick(@item.Id)" class="@(item.IsPrivateDining ? "private-dining" : "") @(item.Status)">
                     <td>
                         @Html.DisplayFor(modelItem => item.ReferenceCode)
                     </td>
@@ -78,9 +76,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PhoneNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsPrivateDining)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Date)
@@ -98,4 +93,11 @@
             }
         </tbody>
     </table>
+    <div class="legend-table invisible">
+        <div class="private-dining">Private dining</div>
+        <div class="Cancelled">Cancelled</div>
+        <div class="Pending">Pending</div>
+        <div class="Completed">Completed</div>
+        <div class="Confirmed">Confirmed</div>
+    </div>
 </div>

@@ -1,15 +1,16 @@
 ﻿table {
-    --n-columns: 8;
+    --n-columns: 7;
     --column-gap: 16px;
     --heading-row-gap: 16px;
     --row-gap: 16px;
     --heading-row-padding: 4px;
 
-    display: grid;
+    display: flex;
+    flex-direction: column;
 }
-thead, tbody{
+thead, tbody {
     display: inherit;
-
+    flex-direction: column;
 }
 thead {
     margin-bottom: var(--heading-row-gap);
@@ -22,12 +23,10 @@ tbody {
 
 
 tr {
-    display: inherit;
+    display: flex;
     gap: var(--column-gap);
-    grid-template-columns: repeat(var(--n-columns), 1fr);
 }
 thead tr {
-    gap: 8px;
 }
 tr:not(thead tr) {
     --border-color: black;
@@ -81,4 +80,42 @@ tr:hover:not(thead tr) {
 
 .full {
     color: brown;
+}
+
+.private-dining {
+    border-left: 2px solid var(--private-dining-color);
+}
+
+.extra-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Cancelled {
+    border-bottom: 2px dotted var(--cancelled-status-color);
+}
+
+.Pending {
+    border-bottom: 2px dotted var(--pending-status-color);
+}
+
+.Completed {
+    border-bottom: 2px dotted var(--completed-status-color);
+}
+
+.Confirmed {
+    border-bottom: 2px dotted var(--confirmed-status-color);
+}
+
+.legend-table {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 4px;
+
+    background-color: var(--background-color);
+}
+.invisible {
+    visibility: hidden;
 }
