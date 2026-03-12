@@ -1,6 +1,7 @@
 ﻿.form-field {
     --label-width: 120px;
     display: flex;
+    flex-wrap: wrap;
     gap: var(--form-gap)
 }
 

@@ -111,8 +111,8 @@ tr:hover:not(thead tr) {
     position: absolute;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 4px 4px;
+    gap: 8px;
+    padding: 8px;
 
     background-color: var(--background-color);
 }

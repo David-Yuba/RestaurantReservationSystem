@@ -3,6 +3,16 @@
 document.addEventListener("DOMContentLoaded", main);
 window.addEventListener("resize", main);
 
+function getHeaderHeight() {
+    const headerElement = document.querySelector("header");
+    document.body.style.setProperty("--header-height", `${headerElement.getBoundingClientRect().height}px`);
+}
+function getNavButtonHeight() {
+    const navButton = document.querySelector(".mobile-navigation-button");
+    if (!navButton) return;
+
+    document.body.style.setProperty("--mobile-navigation-button-height", `${navButton.getBoundingClientRect().height}px`);
+}
 function positionLegendTableAndButton() {
     const legendTable = document.getElementsByClassName("legend-table")[0];
     const legendButton = document.getElementsByClassName("legend-button")[0];
@@ -72,9 +82,23 @@ function setDateTableSizeAndPosition() {
 }
 
 function main() {
+    getHeaderHeight();
     setTableColumnWidth();
     setDateTableSizeAndPosition();
     positionLegendTableAndButton();
+    getNavButtonHeight();
+}
+function onMobileMenuClick() {
+    const mobileMenu = document.getElementsByClassName("mobile-main-navigation")[0];
+    const mobileMenuButton = document.getElementsByClassName("mobile-navigation-button")[0];
+    mobileMenu.classList.toggle("active");
+    mobileMenuButton.classList.toggle("active");
+}
+function onMobileMenuBlur() {
+    const mobileMenu = document.getElementsByClassName("mobile-main-navigation")[0];
+    const mobileMenuButton = document.getElementsByClassName("mobile-navigation-button")[0];
+    mobileMenu.classList.remove("active");
+    mobileMenuButton.classList.remove("active");
 }
 function onLegendClick() {
     const legendTable = document.getElementsByClassName("legend-table")[0];
@@ -89,6 +113,7 @@ function onLegendBlur(event) {
 function onDateInputFocus(event) {
     event.preventDefault();
     let table = document.querySelector(".date-table");
+    setDateTableSizeAndPosition();
     table.classList.add("active");
 }
 function onDateInputBlur(event) {
@@ -389,7 +414,9 @@ async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
 }
 function reformatData() {
     const dateInputEl = document.getElementsByClassName("date-input-field")[0];
-    let [day, month, year] = dateInputEl.value.split('-');
+    if (dateInputEl.value == "") return;
+
+    const [day, month, year] = dateInputEl.value.split('-');
     dateInputEl.value = `${month}-${day}-${year}`;
     setTimeout(function () {
         dateInputEl.value = `${day}-${month}-${year}`;

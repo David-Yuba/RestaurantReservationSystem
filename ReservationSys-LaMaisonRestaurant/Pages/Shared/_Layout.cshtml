@@ -16,7 +16,12 @@
             <div>
                 <h2>LaMaison</h2>
             </div>
-            <nav>
+            <button class="mobile-navigation-button active" onclick="onMobileMenuClick()" onblur="onMobileMenuBlur()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </button>
+            <nav class="main-navigation mobile-main-navigation">
                 <a asp-page="./Index">Make a Reservation</a>
                 <a asp-page="./Admin">Admin panel</a>
             </nav>

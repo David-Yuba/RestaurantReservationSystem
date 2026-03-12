@@ -44,10 +44,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Reservation[0].FullName)
                 </th>
-                <th>
+                <th class="hide-email-field">
                     @Html.DisplayNameFor(model => model.Reservation[0].Email)
                 </th>
-                <th>
+                <th class="hide-phone-field">
                     @Html.DisplayNameFor(model => model.Reservation[0].PhoneNumber)
                 </th>
                 <th>
@@ -71,10 +71,10 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
-                    <td>
+                    <td class="hide-email-field">
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
-                    <td>
+                    <td class="hide-phone-field">
                         @Html.DisplayFor(modelItem => item.PhoneNumber)
                     </td>
                     <td>

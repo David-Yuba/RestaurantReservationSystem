@@ -5,6 +5,8 @@ html {
     --nav-links-gap: 16px;
     --form-gap: 4px;
     --background-color: white;
+    --navigation-button-color: black;
+
     --private-dining-color: gold;
     --cancelled-status-color: red;
     --pending-status-color: black;
@@ -15,7 +17,8 @@ body {
     display: flex;
     min-height: 100svh;
     flex-direction: column;
-    
+    overflow-x: hidden;
+
     background-color: var(--background-color);
 }
 
@@ -57,9 +60,69 @@ footer > .content-wrapper {
     gap: 20px;
 }
 
+
 header nav {
     display: flex;
     align-items: center;
     transform: translateY(2px);
     gap: var(--nav-links-gap);
+}
+
+.mobile-navigation-button {
+    --navigation-button-bar-height: 12px;
+    --nav-bar-border-width: 1px;
+
+    display: none;
+    padding: 0px;
+    flex-direction: column;
+    gap: 4px;
+
+    border: none;
+    opacity: 100;
+    background-color: transparent;
+}
+.mobile-navigation-button > * {
+    height: var(--navigation-button-bar-height);
+    width: 48px;
+    background-color: transparent;
+    border: var(--nav-bar-border-width) solid var(--navigation-button-color);
+    border-radius: 8px;
+}
+
+
+@media (max-width: 768px) {
+    .mobile-navigation-button {
+        display: flex;
+    }
+    .mobile-main-navigation {
+        position: absolute;
+        top: var(--header-height);
+        right: 0px;
+        transform: translateX(100%);
+        display: flex;
+        flex-direction: column;
+        padding: var(--app-padding-x);
+        transition: transform 0.5s linear;
+        background-color: var(--background-color);
+    }
+    .mobile-main-navigation.active {
+        transform: translateX(0%);
+    }
+    .mobile-navigation-button.active :first-child {
+        transform: translateY(calc(var(--mobile-navigation-button-height) / 2 - var(--navigation-button-bar-height) / 2)) rotate(45deg);
+    }
+    .mobile-navigation-button.active :nth-child(2){
+        opacity: 0;
+    }
+    .mobile-navigation-button.active :last-child {
+        transform: translateY(calc(-1 * var(--mobile-navigation-button-height) / 2 + var(--navigation-button-bar-height) / 2)) rotate(-45deg);
+    }
+    .hide-email-field {
+        display: none;
+    }
+}
+@media (max-width: 992px) {
+    .hide-phone-field {
+        display: none;
+    }
 }
