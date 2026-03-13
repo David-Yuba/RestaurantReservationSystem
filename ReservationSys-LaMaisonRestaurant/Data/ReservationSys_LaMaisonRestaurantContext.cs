@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using ReservationSys_LaMaisonRestaurant.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ReservationSys_LaMaisonRestaurant.Models;
 
 namespace ReservationSys_LaMaisonRestaurant.Data
 {
@@ -14,6 +15,15 @@ namespace ReservationSys_LaMaisonRestaurant.Data
         {
         }
 
-        public DbSet<ReservationSys_LaMaisonRestaurant.Models.Reservation> Reservation { get; set; } = default!;
+        public DbSet<Reservation> Reservation { get; set; } = default!;
+        public DbSet<RestaurantState> RestaurantState { get; set; } = default!;
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Reservation>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+            modelBuilder.Entity<RestaurantState>()
+                .OwnsMany(RestaurantState => RestaurantState.OccupancyPerTimeSlot, builder => builder.ToJson());
+        }
     }
 }
