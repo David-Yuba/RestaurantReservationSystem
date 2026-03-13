@@ -55,7 +55,6 @@ public class IndexModel : PageModel
         List<TimeOnly> privateDiningReservations = getAllPrivateDiningReservations();
         return new JsonResult(privateDiningReservations);
     }
-
     
     [BindProperty]
     public Reservation Reservation { get; set; } = default!;
@@ -126,28 +125,15 @@ public class IndexModel : PageModel
     private List<OccupancySlot> ReturnOccupancySlots()
     {
         var reservations = from r in _context.Reservation
-                           where r.IsPrivateDining == false
-                           select r;
-        reservations = reservations.Where(res => res.Date == Date);
-        List<OccupancySlot> occupancy = reservations.ToList()
-            .Select(res => new OccupancySlot(res.TimeSlot, res.PartySize))
-            .OrderBy(occupancy => occupancy.TimeSlot).ToList();
+                           where r.IsPrivateDining == false && r.Date == Date
+                           orderby r.TimeSlot ascending
+                           group r.PartySize by r.TimeSlot into grouped
+                           select new OccupancySlot(
+                                grouped.Key,
+                                grouped.Sum()
+                                );
 
-        var temp = new List<OccupancySlot>();
-        for (int i = 0; i < occupancy.Count(); i++)
-        {
-            if (i == 0) temp.Add(occupancy[i]);
-            else if (temp.Last().TimeSlot == occupancy[i].TimeSlot)
-            {
-                temp.Last().PartySize += occupancy[i].PartySize;
-            }
-            else
-            {
-                temp.Add(occupancy[i]);
-            }
-        }
-
-        return temp;
+        return reservations.ToList();
     }
     private int ReturnOccupancySum()
     {

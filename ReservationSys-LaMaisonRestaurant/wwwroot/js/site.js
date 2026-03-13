@@ -197,7 +197,7 @@ async function onPartySizeInput(event) {
     const dateInputEl = document.getElementsByClassName("date-input-field")[0];
     const timeSlotInputEl = document.getElementsByClassName("time-slot-input")[0];
     if (!partySizeInputEl || !dateInputEl || !timeSlotInputEl) return;
-
+    
 if (IS_PRIVATE_DINING) {
     await updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl);
 
@@ -210,7 +210,7 @@ if (IS_PRIVATE_DINING) {
             throw new Error(`Response status: ${response.status}`);
         }
         let occupancyList = await response.json();
-        
+        console.log(occupancyList);
         const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
 
         timeSlotOptionEls.forEach(function (el) {
