@@ -21,6 +21,19 @@ public static class SeedData
                 return;
             }
 
+            context.RestaurantInfo.Add(new RestaurantInfo
+            {
+                Name = "LaMaison",
+                OpeningHours = new TimeOnly(12, 00),
+                ClosingHours = new TimeOnly(22, 00),
+                ReservationSlotIncrements = new TimeSpan(00, 30, 00),
+                TotalGuestsPerSlot = 20,
+                ExtraInfo = new ExtraInfo
+                {
+                    PrivateDiningStartTime = new TimeOnly(18,00)
+                }
+            });
+
             context.Reservation.AddRange(
                 new Reservation
                 {
@@ -30,7 +43,7 @@ public static class SeedData
                     Email = "alice.johnson@example.com",
                     PhoneNumber = "555-123-4567",
                     SpecialRequest = "Window seat, please.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    Date = new DateOnly(2026,03,14),
                     TimeSlot = new TimeOnly(18, 0),
                     PartySize = 2,
                     IsPrivateDining = false
@@ -43,7 +56,7 @@ public static class SeedData
                     Email = "bob.smith@example.com",
                     PhoneNumber = "555-234-5678",
                     SpecialRequest = "High chair for toddler.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
+                    Date = new DateOnly(2026, 03, 27),
                     TimeSlot = new TimeOnly(19, 30),
                     PartySize = 8,
                     IsPrivateDining = true
@@ -56,7 +69,7 @@ public static class SeedData
                     Email = "carol.lee@example.com",
                     PhoneNumber = "555-345-6789",
                     SpecialRequest = "Allergic to peanuts.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                    Date = new DateOnly(2026, 03, 15),
                     TimeSlot = new TimeOnly(20, 0),
                     PartySize = 3,
                     IsPrivateDining = false
@@ -69,7 +82,7 @@ public static class SeedData
                     Email = "david.kim@example.com",
                     PhoneNumber = "555-456-7890",
                     SpecialRequest = "Celebrating birthday.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(7)),
+                    Date = new DateOnly(2026, 03, 20),
                     TimeSlot = new TimeOnly(20, 0),
                     PartySize = 6,
                     IsPrivateDining = true
@@ -82,7 +95,7 @@ public static class SeedData
                     Email = "emma.brown@example.com",
                     PhoneNumber = "555-567-8901",
                     SpecialRequest = "Quiet corner table.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(3)),
+                    Date = new DateOnly(2026, 03, 24),
                     TimeSlot = new TimeOnly(18, 30),
                     PartySize = 5,
                     IsPrivateDining = false
@@ -95,7 +108,7 @@ public static class SeedData
                     Email = "frank.green@example.com",
                     PhoneNumber = "555-678-9012",
                     SpecialRequest = "Vegan menu options.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(10)),
+                    Date = new DateOnly(2026, 03, 18),
                     TimeSlot = new TimeOnly(20, 0),
                     PartySize = 2,
                     IsPrivateDining = false
@@ -108,8 +121,8 @@ public static class SeedData
                     Email = "grace.miller@example.com",
                     PhoneNumber = "555-789-0123",
                     SpecialRequest = "Wheelchair accessible table.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(12)),
-                    TimeSlot = new TimeOnly(19, 0),
+                    Date = new DateOnly(2026, 03, 28),
+                    TimeSlot = new TimeOnly(19, 30),
                     PartySize = 8,
                     IsPrivateDining = true
                 },
@@ -121,7 +134,7 @@ public static class SeedData
                     Email = "henry.wilson@example.com",
                     PhoneNumber = "555-890-1234",
                     SpecialRequest = "No special requests.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(4)),
+                    Date = new DateOnly(2026, 03, 18),
                     TimeSlot = new TimeOnly(17, 30),
                     PartySize = 3,
                     IsPrivateDining = false
@@ -134,7 +147,7 @@ public static class SeedData
                     Email = "ivy.martinez@example.com",
                     PhoneNumber = "555-901-2345",
                     SpecialRequest = "Anniversary celebration.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(8)),
+                    Date = new DateOnly(2026, 03, 27),
                     TimeSlot = new TimeOnly(21, 0),
                     PartySize = 6,
                     IsPrivateDining = true
@@ -147,7 +160,7 @@ public static class SeedData
                     Email = "jack.turner@example.com",
                     PhoneNumber = "555-012-3456",
                     SpecialRequest = "Gluten-free options.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(6)),
+                    Date = new DateOnly(2026, 03, 23),
                     TimeSlot = new TimeOnly(18, 30),
                     PartySize = 4,
                     IsPrivateDining = false
@@ -160,7 +173,7 @@ public static class SeedData
                     Email = "sophie.carter@example.com",
                     PhoneNumber = "555-234-1111",
                     SpecialRequest = "Near the entrance.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    Date = new DateOnly(2026, 03, 26),
                     TimeSlot = new TimeOnly(18, 0),
                     PartySize = 2,
                     IsPrivateDining = false
@@ -173,7 +186,7 @@ public static class SeedData
                     Email = "liam.walker@example.com",
                     PhoneNumber = "555-345-2222",
                     SpecialRequest = "Table with a view.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    Date = new DateOnly(2026, 03, 26),
                     TimeSlot = new TimeOnly(18, 0),
                     PartySize = 2,
                     IsPrivateDining = false
@@ -186,7 +199,7 @@ public static class SeedData
                     Email = "mia.evans@example.com",
                     PhoneNumber = "555-456-3333",
                     SpecialRequest = "No special requests.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    Date = new DateOnly(2026, 03, 26),
                     TimeSlot = new TimeOnly(18, 0),
                     PartySize = 2,
                     IsPrivateDining = false
@@ -199,7 +212,7 @@ public static class SeedData
                     Email = "noah.scott@example.com",
                     PhoneNumber = "555-567-4444",
                     SpecialRequest = "Prefer booth seating.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    Date = new DateOnly(2026, 03, 26),
                     TimeSlot = new TimeOnly(18, 0),
                     PartySize = 2,
                     IsPrivateDining = false
@@ -212,7 +225,7 @@ public static class SeedData
                     Email = "olivia.king@example.com",
                     PhoneNumber = "555-678-5555",
                     SpecialRequest = "Close to the bar.",
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    Date = new DateOnly(2026, 03, 26),
                     TimeSlot = new TimeOnly(18, 0),
                     PartySize = 5,
                     IsPrivateDining = false

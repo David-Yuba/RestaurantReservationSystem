@@ -17,9 +17,13 @@ namespace ReservationSys_LaMaisonRestaurant.Data
 
         public DbSet<Reservation> Reservation { get; set; } = default!;
         public DbSet<RestaurantState> RestaurantState { get; set; } = default!;
+        public DbSet<RestaurantInfo> RestaurantInfo { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<RestaurantInfo>()
+                .OwnsOne(RestaurantState => RestaurantState.ExtraInfo, builder => builder.ToJson());
             modelBuilder.Entity<Reservation>()
                 .ToTable(tb => tb.UseSqlOutputClause(false));
             modelBuilder.Entity<RestaurantState>()

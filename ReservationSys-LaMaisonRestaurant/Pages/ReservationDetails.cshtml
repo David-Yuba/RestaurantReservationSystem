@@ -2,7 +2,8 @@
 @model ReservationSys_LaMaisonRestaurant.Pages.ReservationDetailsModel
 
 @{
-    ViewData["Title"] = "ReservationDetails";
+    ViewData["Title"] = Model.RestaurantInfo.Name;
+    ViewData["Name"] = Model.RestaurantInfo.Name;
 }
 <div class="page">
     <h1>Reservation</h1>

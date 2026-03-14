@@ -166,7 +166,7 @@ public class IndexModelTests
         using var context = CreateDatabaseContext();
         var model = new IndexModel(context);
 
-        DateTime testingDate = new DateTime(2026, 3, 17);
+        DateTime testingDate = new DateTime(2026, 3, 28);
 
         model.Reservation = new Reservation
         {

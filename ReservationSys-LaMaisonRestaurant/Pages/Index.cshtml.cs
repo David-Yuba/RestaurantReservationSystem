@@ -16,9 +16,14 @@ namespace ReservationSys_LaMaisonRestaurant.Pages;
 public class IndexModel : PageModel
 {
     private readonly ReservationSys_LaMaisonRestaurant.Data.ReservationSys_LaMaisonRestaurantContext _context;
+
+    public readonly RestaurantInfo RestaurantInfo;
     public IndexModel(ReservationSys_LaMaisonRestaurant.Data.ReservationSys_LaMaisonRestaurantContext context)
     {
         _context = context;
+        RestaurantInfo = (from r in _context.RestaurantInfo
+                          where r.Name == "LaMaison"
+                          select r).First();
     }
 
     public IActionResult OnGet()
@@ -95,7 +100,7 @@ public class IndexModel : PageModel
         }
 
         int occupancySum = ReturnOccupancySum();
-        if(occupancySum + Reservation.PartySize > 20) {
+        if(occupancySum + Reservation.PartySize > RestaurantInfo.TotalGuestsPerSlot) {
             return Page();
         }
 
@@ -109,7 +114,7 @@ public class IndexModel : PageModel
     {
         if (Date is null) return 10;
 
-        int maximumTimeSlotOccupancy = 20;
+        int maximumTimeSlotOccupancy = RestaurantInfo.TotalGuestsPerSlot;
 
         var reservations = from r in _context.Reservation
                            where r.IsPrivateDining == false
@@ -161,17 +166,22 @@ public class IndexModel : PageModel
     };
     private bool isValidTimeSlot(TimeOnly timeSlot)
     {
-        List<TimeOnly> validTimeslots;
+        List<TimeOnly> validTimeslots = new List<TimeOnly>();
         if (!Reservation.IsPrivateDining)
-            validTimeslots =
-                [new TimeOnly(12, 00), new TimeOnly(12, 30), new TimeOnly(13, 00), new TimeOnly(13, 30),
-                new TimeOnly(14, 00), new TimeOnly(14, 30), new TimeOnly(15, 00), new TimeOnly(15, 30),
-                new TimeOnly(16, 00), new TimeOnly(16, 30), new TimeOnly(17, 00), new TimeOnly(17, 30),
-                new TimeOnly(18, 00), new TimeOnly(18, 30), new TimeOnly(19, 00), new TimeOnly(19, 30),
-                new TimeOnly(20, 00), new TimeOnly(20, 30), new TimeOnly(21, 00)];
-        else validTimeslots =
-                [new TimeOnly(18, 00), new TimeOnly(18, 30), new TimeOnly(19, 00), new TimeOnly(19, 30),
-                new TimeOnly(20, 00), new TimeOnly(20, 30), new TimeOnly(21, 00)];
+        {
+            TimeOnly closingHours = RestaurantInfo.ClosingHours.Add(-RestaurantInfo.ReservationSlotIncrements);
+
+            for (TimeOnly i=RestaurantInfo.OpeningHours ; i<closingHours ; i=i.Add(RestaurantInfo.ReservationSlotIncrements))
+                validTimeslots.Add(i);
+        }
+        else
+        {
+            TimeOnly closingHours = RestaurantInfo.ClosingHours.Add(-RestaurantInfo.ReservationSlotIncrements);
+            TimeOnly startTime = RestaurantInfo.ExtraInfo is not null ? RestaurantInfo.ExtraInfo.PrivateDiningStartTime : RestaurantInfo.OpeningHours;
+
+            for (TimeOnly i=startTime ; i<closingHours ; i=i.Add(RestaurantInfo.ReservationSlotIncrements))
+                validTimeslots.Add(i);
+        }
 
         bool isValid = validTimeslots.Contains(timeSlot);
 

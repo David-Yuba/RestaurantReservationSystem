@@ -1,6 +1,8 @@
 ﻿@page "{id:int}"
 @model SuccessfulReservationModel
 @{
+    ViewData["Title"] = Model.RestaurantInfo.Name;
+    ViewData["Name"] = Model.RestaurantInfo.Name;
 }
 
 <div class="page">

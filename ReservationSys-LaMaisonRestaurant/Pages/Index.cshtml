@@ -2,7 +2,8 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Model.RestaurantInfo.Name;
+    ViewData["Name"] = Model.RestaurantInfo.Name;
 }
 <div class = "page">
     <h1>Create a Reservation</h1>
@@ -46,10 +47,10 @@
             <select asp-for="Reservation.TimeSlot" class="form-data time-slot-input" oninput="onTimeSlotInput(event)">
                 <option value="">Select time</option>
 @{
-    TimeOnly startTime = new TimeOnly(12,00);
-    TimeOnly endTime = new TimeOnly(22,00);
+    TimeOnly startTime = Model.RestaurantInfo.OpeningHours;
+    TimeOnly endTime = Model.RestaurantInfo.ClosingHours;
 
-    for (TimeOnly i=startTime ; i < endTime.AddMinutes(-30) ; i = i.AddMinutes(30)){
+    for (TimeOnly i=startTime ; i < endTime.Add(-Model.RestaurantInfo.ReservationSlotIncrements) ; i = i.Add(Model.RestaurantInfo.ReservationSlotIncrements)){
                 <option value="@(i.ToString("HH:mm"))" class="time-slot-option">@(i.ToString("HH:mm"))</option>
     }
 }

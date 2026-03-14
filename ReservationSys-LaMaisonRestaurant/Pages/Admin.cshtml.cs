@@ -8,10 +8,13 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
     public class AdminModel : PageModel
     {
         private readonly ReservationSys_LaMaisonRestaurant.Data.ReservationSys_LaMaisonRestaurantContext _context;
-
+        public readonly RestaurantInfo RestaurantInfo;
         public AdminModel(ReservationSys_LaMaisonRestaurant.Data.ReservationSys_LaMaisonRestaurantContext context)
         {
             _context = context;
+            RestaurantInfo = (from r in _context.RestaurantInfo
+                              where r.Name == "LaMaison"
+                              select r).First();
         }
 
         public IList<Reservation> Reservation { get; set; } = default!;
@@ -29,6 +32,7 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
         public async Task OnGetAsync()
         {
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            TimeOnly timeNow = TimeOnly.FromDateTime(DateTime.Now);
 
             var reservations = from r in _context.Reservation select r;
             if (FilterDate is not null)
@@ -57,7 +61,7 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
             else 
             {
                 reservations = (from r in reservations
-                           orderby r.Date > today ? 0 : 1, r.Date ascending , r.TimeSlot ascending
+                           orderby (r.Date >= today && r.TimeSlot >= timeNow) ? 0 : 1, r.Date ascending , r.TimeSlot ascending
                            select r);
             }
 
@@ -86,7 +90,7 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
                                              where r.Date == date && r.TimeSlot == time && r.IsPrivateDining == false
                                              select r.PartySize).Sum();
 
-            if (sumOfPeopleOnSameDateTime >= 20)
+            if (sumOfPeopleOnSameDateTime >= RestaurantInfo.TotalGuestsPerSlot)
             {
                 return true;
             }

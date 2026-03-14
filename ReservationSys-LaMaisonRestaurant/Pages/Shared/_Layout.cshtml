@@ -14,7 +14,7 @@
     <header>
         <div class="content-wrapper">
             <div>
-                <h2>LaMaison</h2>
+                <h2>@ViewData["Name"]</h2>
             </div>
             <button class="mobile-navigation-button" onclick="onMobileMenuClick()" onblur="onMobileMenuBlur()">
                 <div></div>
@@ -35,7 +35,7 @@
 
     <footer>
         <div class="content-wrapper">
-            &copy; 2026 - LaMaison Restaurant - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2026 - @ViewData["Name"] Restaurant - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
