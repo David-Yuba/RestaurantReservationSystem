@@ -13,7 +13,7 @@ Visual Studio 2026 is optional but provides the best experience when view source
 ### Before following the steps make sure you have:
 1. Docker installed and running: [Download](https://www.docker.com/products/docker-desktop/)
    the latest version for your operating system and processor architecture
-2. Docker compose version: v5.0.2, check it with:
+2. Docker compose version: v5.1.0, check it with:
 ```powershell
 ## Check docker compose version
 docker compose version
