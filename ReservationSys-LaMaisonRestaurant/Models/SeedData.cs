@@ -37,7 +37,7 @@ public static class SeedData
                 },
                 new Reservation
                 {
-                    Status = "Confirmed",
+                    Status = "Pending",
                     ReferenceCode = "DEF456",
                     FullName = "Bob Smith",
                     Email = "bob.smith@example.com",
@@ -50,7 +50,7 @@ public static class SeedData
                 },
                 new Reservation
                 {
-                    Status = "Cancelled",
+                    Status = "Pending",
                     ReferenceCode = "GHI789",
                     FullName = "Carol Lee",
                     Email = "carol.lee@example.com",
@@ -89,7 +89,7 @@ public static class SeedData
                 },
                 new Reservation
                 {
-                    Status = "Confirmed",
+                    Status = "Pending",
                     ReferenceCode = "PQR678",
                     FullName = "Frank Green",
                     Email = "frank.green@example.com",
@@ -115,7 +115,7 @@ public static class SeedData
                 },
                 new Reservation
                 {
-                    Status = "Cancelled",
+                    Status = "Pending",
                     ReferenceCode = "VWX234",
                     FullName = "Henry Wilson",
                     Email = "henry.wilson@example.com",
@@ -128,7 +128,7 @@ public static class SeedData
                 },
                 new Reservation
                 {
-                    Status = "Confirmed",
+                    Status = "Pending",
                     ReferenceCode = "YZA567",
                     FullName = "Ivy Martinez",
                     Email = "ivy.martinez@example.com",

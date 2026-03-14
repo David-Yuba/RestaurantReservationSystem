@@ -10,7 +10,6 @@ namespace ReservationSys_LaMaisonRestaurant.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.Sql(
                     @"
 CREATE TRIGGER InsertReservationTrigger
@@ -39,6 +38,12 @@ BEGIN
 	LEFT JOIN dbo.RestaurantState rs ON rs.Date = i.Date
 	WHERE rs.Date IS NULL
 
+	DELETE FROM @GuestSumOverDates
+	INSERT INTO @GuestSumOverDates 
+	SELECT Date, TimeSlot, SUM(PartySize) AS PartySizeSum 
+	FROM inserted AS i
+	WHERE i.IsPrivateDining = 0
+	GROUP BY Date, TimeSlot
 	
 	DECLARE @GuestSumJsonOverDate Table (
 		Date DATE,
@@ -87,7 +92,7 @@ BEGIN
 	GROUP BY Date
 
 	UPDATE dbo.RestaurantState
-	SET OccupancyPerTimeSLot = JsonTable.OccupancySlotsJson
+	SET OccupancyPerTimeSlot = JsonTable.OccupancySlotsJson
 	FROM RestaurantState rs
 	INNER JOIN @GuestSumJsonOverDate JsonTable ON rs.Date = JsonTable.Date
 END
