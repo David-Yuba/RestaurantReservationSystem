@@ -35,13 +35,13 @@ public class IndexModel : PageModel
     public bool PrivateDining { get; set; }
     public IActionResult OnGetSize()
     {
-        List<OccupancySlot> occupancySlots = ReturnOccupancySlots();
+        List<TimeSlotOccupancy> occupancySlots = ReturnOccupancySlots();
 
         return new JsonResult(occupancySlots);
     }
     public IActionResult OnGetDate()
     {
-        List<OccupancySlot> occupancySlots = ReturnOccupancySlots();
+        List<TimeSlotOccupancy> occupancySlots = ReturnOccupancySlots();
         return new JsonResult(occupancySlots);
     }
     public IActionResult OnGetTime()
@@ -122,18 +122,13 @@ public class IndexModel : PageModel
         if (maximumPartySize > 10) maximumPartySize = 10;
         return maximumPartySize;
     }
-    private List<OccupancySlot> ReturnOccupancySlots()
+    private List<TimeSlotOccupancy> ReturnOccupancySlots()
     {
-        var reservations = from r in _context.Reservation
-                           where r.IsPrivateDining == false && r.Date == Date
-                           orderby r.TimeSlot ascending
-                           group r.PartySize by r.TimeSlot into grouped
-                           select new OccupancySlot(
-                                grouped.Key,
-                                grouped.Sum()
-                                );
+        var res = from r in _context.RestaurantState.AsNoTracking()
+                  where r.Date == Date
+                  select r.OccupancyPerTimeSlot;
 
-        return reservations.ToList();
+        return res.FirstOrDefault() ?? new List<TimeSlotOccupancy>();
     }
     private int ReturnOccupancySum()
     {

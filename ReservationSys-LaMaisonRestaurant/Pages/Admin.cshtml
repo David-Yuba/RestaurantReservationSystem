@@ -31,7 +31,7 @@
         <input type="submit" value="Apply"/>
     </form>
     <div class="extra-info">
-        <h4>Expected number of guests: @Model.GuestNumber</h4>
+        <h4>Expected number of guests @(Model.FilterDate is null ? "today" : "on " + Model.FilterDate?.ToString("dd-MM-yyyy")): @Model.GuestNumber</h4>
         <button onclick="onLegendClick(event)" onblur="onLegendBlur(event)" class="legend-button">Legend</button>
     </div>
     <h1>Reservations</h1>

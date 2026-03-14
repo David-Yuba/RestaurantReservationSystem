@@ -65,19 +65,19 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
 
             if(FilterDate is null)
             {
-                var sum = from r in _context.Reservation
+                var sum = from r in _context.RestaurantState
                                          where r.Date == today
-                                         select r.PartySize;
+                                         select r.Guests;
 
-                GuestNumber = sum.ToList().Sum();
+                GuestNumber = sum.FirstOrDefault();
             }
             else
             {
-                var sum = from r in _context.Reservation
-                                         where r.Date == FilterDate
-                                         select r.PartySize;
+                var sum = from r in _context.RestaurantState
+                          where r.Date == FilterDate
+                          select r.Guests;
 
-                GuestNumber = sum.ToList().Sum();
+                GuestNumber = sum.FirstOrDefault();
             }
         }
         public bool IsSlotFull(DateOnly date, TimeOnly time)

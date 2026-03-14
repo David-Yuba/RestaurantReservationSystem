@@ -46,7 +46,6 @@ function setTableColumnWidth() {
             columnWidths[i] = tableHeadingWidth;
     }
 
-    console.log(columnWidths);
     for (let i = 0; i < tableHeadings.length; i++)
         tableHeadings[i].style.width = `${Math.ceil(columnWidths[i]) + rightPadding}px`;
 
@@ -210,7 +209,7 @@ if (IS_PRIVATE_DINING) {
             throw new Error(`Response status: ${response.status}`);
         }
         let occupancyList = await response.json();
-        console.log(occupancyList);
+
         const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
 
         timeSlotOptionEls.forEach(function (el) {
@@ -355,17 +354,17 @@ function reformatTimeString(time) {
 function timeSlotIsNotFull(occupancyList, el, partySize) {
     let occupancySlot = occupancyList.find(slot => reformatTimeString(slot.timeSlot) == el.value);
 
-    if (!occupancySlot || occupancySlot.partySize <= 10) return 10;
+    if (!occupancySlot || occupancySlot.partySizeSum <= 10) return 10;
 
-    let newMaxPartySize = 20 - occupancySlot.partySize;
+    let newMaxPartySize = 20 - occupancySlot.partySizeSum;
     if (newMaxPartySize >= parseInt(partySize)) return newMaxPartySize;
     else return 0;
 }
 function getNewMaxPartySize(occupancyList, timeSlot) {
     let occupancySlot = occupancyList.find(slot => reformatTimeString(slot.timeSlot) == timeSlot);
-    if (!occupancySlot || parseInt(occupancySlot.partySize) <= 10) return 10;
+    if (!occupancySlot || parseInt(occupancySlot.partySizeSum) <= 10) return 10;
 
-    return 20 - parseInt(occupancySlot.partySize);
+    return 20 - parseInt(occupancySlot.partySizeSum);
 }
 function isCurrentValueValid(el, occupancyList, partySize) {
 
