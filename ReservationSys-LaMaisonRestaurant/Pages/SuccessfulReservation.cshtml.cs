@@ -21,12 +21,14 @@ public class SuccessfulReservationModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        if (id == null)
+        // Check if the get request comes directly from a redirect in Index.cshtml
+        if (TempData["ReservationSuccess"] == null)
         {
             return NotFound();
         }
 
         var reservation = await _context.Reservation.FirstOrDefaultAsync(m => m.Id == id);
+        // This if is only here to avoide intellisense warnings
         if (reservation == null)
         {
             return NotFound();

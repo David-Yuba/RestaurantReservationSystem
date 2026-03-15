@@ -5,6 +5,8 @@ public class Reservation
 {
     public int Id { get; set; }
 
+    // A string that allows whoever recieves the guests to quickly identify the reservation
+    // It is generated not collected
     [Display(Name = "Reference Code")]
     public string ReferenceCode { get; set; } = string.Empty;
 
@@ -27,6 +29,7 @@ public class Reservation
     [DisplayFormat(DataFormatString = "{0:HH:mm}")]
     public TimeOnly TimeSlot { get; set; }
 
+    // The number of people to accommodate
     [Display(Name = "Party Size")]
     [Range(0,12)]
     public int PartySize { get; set; }
@@ -35,6 +38,7 @@ public class Reservation
     [StringLength(500)]
     public string? SpecialRequest { get; set; }
 
+    // A variable of a value of "Pending", "Confirmed", "Cancelled" or "Completed"
     public string Status { get; set; } = "Pending";
 
     [Display(Name = "Private Dining")]

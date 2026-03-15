@@ -84,6 +84,13 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
                 GuestNumber = sum.FirstOrDefault();
             }
         }
+
+        /// <summary>
+        /// Query the database for maximum capacity in the givent DateTime
+        /// </summary>
+        /// <param name="date">The Date to query over</param>
+        /// <param name="time">The Time to query over</param>
+        /// <returns>True or false</returns>
         public bool IsSlotFull(DateOnly date, TimeOnly time)
         {
             var sumOfPeopleOnSameDateTime = (from r in _context.Reservation
