@@ -134,7 +134,7 @@ public static class SeedData
                     Email = "henry.wilson@example.com",
                     PhoneNumber = "555-890-1234",
                     SpecialRequest = "No special requests.",
-                    Date = new DateOnly(2026, 03, 18),
+                    Date = new DateOnly(2026, 03, 19),
                     TimeSlot = new TimeOnly(17, 30),
                     PartySize = 3,
                     IsPrivateDining = false

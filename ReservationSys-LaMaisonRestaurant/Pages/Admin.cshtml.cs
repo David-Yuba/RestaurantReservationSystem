@@ -60,9 +60,9 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
             }
             else 
             {
-                reservations = (from r in reservations
-                           orderby (r.Date >= today && r.TimeSlot >= timeNow) ? 0 : 1, r.Date ascending , r.TimeSlot ascending
-                           select r);
+                reservations = from r in reservations
+                           orderby (r.Date > today || (r.Date == today && r.TimeSlot >= timeNow)) ? 0 : 1, r.Date ascending , r.TimeSlot ascending
+                           select r;
             }
 
             Reservation = await reservations.ToListAsync();
