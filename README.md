@@ -1,9 +1,9 @@
 # Restaurant reservation system
-This project Features a full stack webpage for an imaginary restaurant LaMaison. The website is mainly focused on solving a few problems concerning the management of reservations for restaurants. The process of receiving the reservation, validating the reservation against the current state of the restaurant on a given day, and formating the state of the restaurant ready for humans to easily process and make decisons around are the key processes the system aims to handle.
+This project Features a full stack webpage for an imaginary restaurant LaMaison. The website is mainly focused on solving a few problems concerning the management of reservations for restaurants. The process of receiving the reservation, validating the reservation against the current state of the restaurant on a given day, and formatting the state of the restaurant ready for humans to easily process and make decisions around are the key processes the system aims to handle and augment.
 
-The system however remains quite fluid, since reservations arive in the pending state needing the approval of a person, with the ability to cancel or approve a reservation with minimal effort.
+The system however remains quite fluid, since reservations arrive in the pending state needing the approval of a person, with the ability to cancel or approve a reservation with minimal effort.
 
-## Prerequiesites
+## Prerequisites
 The whole app is containerized using docker which handles the app environment, including setting up the asp.net core dependencies, setting up the database with the required tables and data for testing purposes, and setting up a unit test environment which is used as proof of the apps logical correctness.
 
 Git is optional but allows for downloading the app source code from the command line.
@@ -23,7 +23,7 @@ docker compose version
 ### How to run
 1. Start by opening a command line interface of your choice (both linux or windows work)
 2. Once you are positioned into the directory in which you wish to download the source code enter the following command:
-   (alternatively you can also download the source code manualy from this github repository)
+   (alternatively you can also download the source code manually from this github repository)
 ```powershell
 ## Download the source code from this repository
 git clone https://github.com/David-Yuba/RestaurantReservationSystem.git
@@ -59,7 +59,7 @@ There are four main parts to the app when it is running.
 #### UI
 
 The UI consists of:
-1. The index page (./) - the page for submiting new reservations
+1. The index page (./) - the page for submitting new reservations
 2. The successful reservation page (./SuccessfulReservation/{id:int}) - the page to which the app redirects the user to when a reservation is successful, informing the user once more about all the user inputs
 3. The admin page (./admin) - the page to view existing reservations
 4. The reservation details page (./reservationdetails?id=) - the page to view all the information about a reservation and to update the status of a reservation
@@ -73,7 +73,10 @@ The test container is built but not run after docker compose. To run it use the 
 #### The app container
 You can access the app environment through docker desktop container reservationsys-lamaisonrestaurant-1 exec tab. Alternatively connect to the container through the terminal by using the above mentioned command.
 
-## Assumptions when building the app and possible problems
-1. When developing the UI I made the assumption that the person making a reservation will jump around the individual fields, and I believe I covered all cases for input which does result in a robust client side validation which can only be circumvented by the use of javascript disabling or manually editing the post request.
-Because of the robustness of the client side validation I implemeneted the serverside validation in a way that doesn't send back any information on why it failed. This might be a drawback if there is a case in client side validation I overlooked, and could cause a failure to make a reservation without proper user feedback being sent.
-2. In C# I am using DateTime.Now which requires the server time to be set to CET to comply with the app being CET localized. 
+## Possible problems
+1. When building the app with docker, sometimes an extra container is built which doesn't do anything. This is quite hard to debug, because it doesn't happen always and I didn't want to waste time on it, since even when it happens the app works just fine. 
+
+## Documentation
+I have written a Latex file to serve as documentation for the codebase. The file is in the root directory, with its compiled pdf version.
+However I haven't had the time to proof read it or to make it pretty, which is why it might not be very good but I do believe it does shine a light on my thought process while building the app as well as some conventions I decided to follow.
+For that reason I also added annotations to the codebase in the form of comments, and grouped code together with regions where possible.

@@ -1,0 +1,276 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[nonumberlist]{glossaries}
+\usepackage{blindtext}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{inconsolata}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+\renewcommand*{\glspostdescription}{}
+\setglossarystyle{list}
+
+\makeglossaries
+\newglossaryentry{model}
+{
+    name=Model,
+    description={refers to the c\# classes which which the dotnet entity framework uses to create a database. Each class corresponds to one table.}
+}
+\newglossaryentry{page model}
+{
+    name=Page model,
+    description={refers to a c\# class that extends the base \texttt{MVC.RazorPages.PageModel} class. It contains methods that correspond to the REST api endpoints and custom handler functions. Aside from those public methods it also holds any state variables used in the creation of the page.}
+}
+\newglossaryentry{page}
+{
+    name=Page,
+    description={refers to the general idea of a webpage, as well as the razor specific syntax of c\# mixed with HTML. Which of those is the correct meaning should be clear from the context.}
+}
+
+\title{Restaurant Reservation System code documentation}
+\author{David Antolić}
+\date{March-2026}
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+This code documentation is concerned only with the dotnet reservation system app and the unit tests project in the solution. It assumes the existence of an environment where communication between the database and the app is already setup. 
+
+The documentation references always references the latest git commit unless explicitly stated otherwise.
+
+This documentation assumes the readers basic familiarity with Visual Studio and its terminology because this was my text editor of choice, and because of that I believe it is the best editor to view the source code. The documentation also assumes a familiarity with front-end web programming languages, C\# and transact-SQL.
+
+This documentation is meant to be read along side the actual code base, since this is only providing the instructions on how to read and maintain the code. Which section corresponds to which file/folder in the codebase should be obvious.
+
+The general structure of the documentation starts with defining frequently used terms, and tries to point the reader to think in a similar direction as I was thinking in when building the project. After the base is built we move onto the actual file, code structure, naming conventions. What follows is a list of know bugs and limitations, as well as the general direction the code would benefit from going into.
+
+\subsection{Prerequisite knowledge}
+Since the project uses the razor pages architecture one could use some familiarity with it. My background with razor pages mostly consists of microsoft \href{https://learn.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-10.0&tabs=visual-studio}{quick overview} and \href{https://learn.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-10.0&tabs=visual-studio}{Create a razor page}. All of my initial decisions were influenced by those tutorials.
+
+\subsection{Defining terms}
+There are a few terms specific to razor pages which we will define for the context of this source code. After this point in the text when this terms are mentioned this is what they mean.
+
+\vspace{-1.5cm}
+\glsaddall
+\printglossary[style=altlist,title={},toctitle={}]
+
+\section{Folder structure}
+The "./" relative path corresponds to the main dotnet project in the solution.
+The folders relevant to the code base are:
+\begin{description}
+    \item[./wwwroot] Contains all the static css, javascript, font files as well as the code for the jquery library.
+    \item[./Data] Contains the class extending \texttt{EntityFrameworkCore.DbContext} class needed to allow EF to map the model definitions to a database. Its initial state was generated via the Visual Studio scaffolding feature. 
+    \item[./Migrations] Contains generated c\# code based on the current state of the class extending the EF class \texttt{DbContext} and the model. The code is generated using the EF Add-Migration command. There is a small exception to this rule which we will get to in the database section.
+    \item[./Models] Contains all the c\# classes that are mapped over to the database via EF core defining the structure of the database. One exception to this is the \texttt{SeedData} class which is used to populate the database with initial state not affecting its structure.
+    \item[./Pages] Contains all the page and page model code, where file pairs in the form of \texttt{(<FileName>.cshtml, <FileName>.cshtml.cs)} can be viewed as individual routes of the page. Here the Index route holds its usual role.
+    \item[./Pages/Shared] Contains page code common to all individual routes. 
+    \item[../ReservationSys-LaMaisonRestaurant.test] Contains all the tests for the dotnet application.
+\end{description}
+
+\section{Code structure}
+Now we will examine the actual code base and the way it is separated into files.
+We will categorize the code into four distinct categories: model, page model, page, static web files and database. The categories are mostly informal and improvised, with the main characteristics separating them being the languages used, and their role in the system.
+\begin{center}
+    \begin{tabularx}{\textwidth}{ |M{2.7cm}|M{3.5cm}|X| }
+        \hline
+        \multicolumn{1}{|c|}{\textbf{Categories}} & \multicolumn{1}{|c|}{\textbf{Languages}} & \multicolumn{1}{|c|}{\textbf{Role}} \\
+        \hline
+        Model & c\# & Defines the shape of the data \\
+        \hline
+        Page model & c\# & Defines the logic of the app \\
+        \hline
+        Page & c\# and HTML & Structures the general HTML sent to the client \\
+        \hline
+        Static web files & javascript and css & Determines the design and the interactivity of the client side app \\
+        \hline
+        Database & transact-sql & Serves as a global variable whose structure is defined by the model \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\subsection{Model}
+The model defines three main classes that shape the database: \newline \texttt{Models.RestaurantInfo}, \texttt{Models.Reservationt} and \texttt{RestaurantState}. Each of the classes is used in different phases of the process it is trying to model. The best starting point is \texttt{Models.RestaurantInfo} because it is the simplest to understand and carries a lot of importance in the process of maintaining the code for the programmer.
+\subsubsection{RestaurantInfo}
+This class contains all the information about a restaurant that defines the business, and subsequently affects the business logic, or just defines the identity of the business in the form of a brand name. This allows for easier maintenance of the code in the event of a restaurant changing its business hours, expanding/reducing its capacity, changing brand name and so on. The \texttt{ExtraInfo} member variables primary use is in giving the class as JSON field where a programmer can store data that is not common across restaurants.
+\subsubsection{Reservation}
+This class defines the shape of the data collected from the customer, defines the general validation that is possible to define through attributes and controls the format in which the data and the data field names are displayed.
+\subsubsection{RestaurantState}
+A class meant to represent the calculated state of a restaurant on a given day. It is never directly written into and is meant to only be updated by the use of triggers which will be discussed in the database section.
+\subsubsection{SeedData}
+A class used only in development that is meant to fill the database with an initial state over which one can run tests to test the apps logical correctness.
+
+\subsection{Page model}
+The contents of the page model and page files(listed in the next section) were primarily generated using the Visual studio tools for creating a project and razor page scaffolding. For this reason their explanations will mostly focus on the peculiarities and new additions by me, while to get the general idea the reader is invited to check Microsoft's documentation on the topic of razor pages
+
+The page model classes are contained in the \texttt{<PageName>.cshtml.cs} files. The \texttt{<PageName>} also defines the name of the route. Only two page models are allowed to modify the database, those being \texttt{Index.cshtml.cs} and \texttt{ReservationDetails.cshtml.cs}, while others only support Get methods
+The entry point for all models is the constructor. The main role of all constructors is to set up a \texttt{\_context} member variable used to establish a connection to the database, and query the said database to get the \texttt{RestaurantInfo} data.
+\subsubsection{IndexModel}
+The primary purpose of \texttt{IndexModel} is to verify the validity of the data before inserting the \texttt{Reservation} into the database, and to handle a few query strings on the home route. The following methods make up it's primary functions:
+\begin{description}
+    \item[\texttt{OnPostAsync()}] Receives a post method containing the form data, which is bound to the \texttt{IndexModel.Reservation} member variable. This data is then passed through individual terminating if conditions. All of the terminating if statements cause the page to reload with the users data intact. The page reloads by themselves give no feedback to the user about the failure or the reason for it. That being said non of them should be reachable without editing the post request or disabling javascript.
+    
+    A successful reservation has two paths that it can take that depend on whether the \[\text{IndexModel.Reservation.IsPrivateDining is true or false}\] because the validation requirements change with the value of the condition.
+
+    Before the reservation is successful the method also generates the required \texttt{Reservation.ReferenceCode} and sets the flag \[TempData["ReservationSuccess"]=true\] to protect the redirected page from being accessed after the reservation was made. 
+
+    \item[\texttt{OnGet<HandlerName>()}] These functions use the bound member variables which are bound to a query string and their results are usually a JSON response used to dynamically update the webpage without a full reload.
+\end{description}
+
+\subsubsection{AdminModel}
+The primary function of the \texttt{AdminModel} is to structure the data from the database according to user input. It does so through:
+\begin{description}
+    \item[\texttt{OnGetAsync()}] Uses the variables that are bound to a query string to query the database and structure the reservations accordingly.
+    
+    It does so by using cascading if statements which all build upon a single LINQ query which is finally resolved to a list and the page is built with the new reservation list.
+\end{description}
+
+\subsubsection{ReservationDetails}
+The main functions of the \texttt{ReservationDetailsModel} is to allow the modification of only the \texttt{Reservation.Status} field of the selected reservation, and to query the database for all of the data concerning the reservation. It does so through two methods:
+\begin{description}
+    \item[\texttt{OnGetAsync(int?\;id)}] This method protects from a non existent id with a non existent reservation with the given id. On success it returns the page with the complete data for the reservation.
+    \item[\texttt{OnPostAsync()}] This method protects against an invalid \texttt{Reservation.Status} value, and modifies the status field if the reservation exists.
+\end{description}
+
+\subsubsection{SuccessfulReservation}
+The primary function of the \texttt{SuccessfulReservation} is to protect the user data from being exposed to the world wide web.
+\begin{description}
+    \item[\texttt{OnGetAsync(int?\;id)}] This functions main terminating if checks the temporary flag set by \texttt{IndexModel.OnPostAsync()} to make sure the data for the reservation is only accessible right after the reservation was made.
+    
+    This might be useless due to the fact the admin page is completely exposed, but this way when implementing authentication one needs only to worry about the \texttt{AdminModel}
+\end{description}
+
+\subsection{Page}
+The pages are defined in \texttt{<PageName>.cshtml} files. We will use this section to paint the picture of the overall hierarchy in the website. The following files make up the final structure of the html that is sent to the client.
+
+One code indentation rule I tried out is all block c\# code in \texttt{@\{\}} is excluded from the hierarchical indentation of html elements.
+
+How the hierarchy affects the design of the page will be discussed in the static web files section. 
+
+Most event handler functions are added directly into the HTML markup instead of the usual javascript method, but their explanations are saved for a later chapter.
+\begin{description}
+    \item[\texttt{./Shared/\_Layout.cshtml}] This defines the shared hierarchy between all the different pages whose contents are injected instead of the \texttt{@RenderBody()} method. 
+    \item[\texttt{Index.cshtml}] The main bulk of the code in this file is the form and its input fields. Most of the fields are just general html input fields with a few exceptions.
+    
+    Before we discuss the date input field we will explain the date dropdown menu.
+    At the end of the file removed from the general form hierarchy is a \texttt{div[class="date-table"]}. It is populated in the following order. First the current month name and year, then the individual day names, then empty divs ensuring that the days align with the day names, and finally it is populated with thirty subsequent dates including today.
+    The date input is then handled via javascript using the custom dropdown date menu.
+
+    The dropdown menu options for the timeslot selection is populated via c\#. It is populated with all possible values and the rules defined in the problem specification are handled purely by adding or removing a class through javascript which will be discussed later. The \texttt{IndexModel} of course handles its own validation which was discussed previously.
+    \item[\texttt{Admin.cshtml}] This html is divided into three main parts. The first section contains user input controlling how and which reservations populate the page. The second section contains some aggregated data concerning the number of guests on a given day as well as a legend explaining the color coding present on the page. And the final section is the table that contains the reservation data. 
+    
+    Once more the legend dropdown table \texttt{div[class=legend-table]} is removed from the rest of the html hierarchy and controlled via javascript.
+
+\end{description}
+The remaining pages \texttt{ReservationDetails.cshtml} and \texttt{SuccessfulReservation.cshtml} have nothing special about them are follow the scaffolded code closely.
+
+\subsection{Static web files}
+The \texttt{./wwwroot} folder is filled with folders with self explanatory names. We will cover the folders \texttt{./wwwroot/js} and \texttt{./wwwroot/css}. In the js section we are covering the interactivity of the client, and in the css section we are covering the design of the app.
+\begin{description}
+    \item[\texttt{./wwwroot/js}] The javascript code is explained in order in which it is written in the \texttt{./js/site.js} file. 
+    The javascript for the whole application is in one file, which is why there are terminating if statements protecting the code from being run on a page that doesn't contain the searched for element.
+
+    The general rule I follow when writing javascript is to avoid top level statements. This excludes event listeners for \texttt{"DOMContentLoaded"} and \texttt{"resize"}. One other exclusion in this case is a global variable \texttt{IS\_PRIVATE\_DINING} used to change the client side validation logic depending on whether the user chose the private dining option. Since the use of \texttt{IS\_PRIVATE\_DINING} completely changes the logic of a function its use is limited only at the start of a function with its indentation signifying its role as a flag that completely changes the logic of the function.
+    
+    After the top level statements there are five functions which are run in the \texttt{main()} function. Their primary purpose is to position elements and set their sizes whose position and size would be hard or impossible to set using css. 
+
+    Following is the \texttt{main()} function that is attached to the \texttt{"resize"} and \texttt{"DOMContentLoaded"} event types. The rest of the functions are event handlers on different user events (helper functions excluded). 
+
+    I have made no assumptions on the order in which the user inputs the data, thus the app should work and show correct validation even in the case of the user being unsure of the date, timeslot and less likely the party size.
+
+    The most complicated part is the said validation, although I have tried keeping a consistent structure in each of the form input handlers to allow for easier refactoring further down the line. The general structure is as follows:
+    \begin{enumerate}
+        \item Parse the html for all the input elements whose values affect the view
+        \item Check if the \texttt{IS\_PRIVATE\_DINING=true}
+            \begin{enumerate}
+                \item If it is run \texttt{updateView(...)}
+                \item Else continue
+            \end{enumerate}
+        \item Use the current values of the input elements to send a get request with a query string containing the input element values.
+        \item Update the state of the view with the received JSON
+    \end{enumerate}
+
+    The rest of the individual functions are explained in the code.
+
+    \item[\texttt{./wwwroot/css}] CSS file names are numbered, which signifies the ordering in which they are linked in the \texttt{./Pages/Shared/\_Layout.cshtml}.
+    
+    For the design of the webpage I have went with a style that purely focuses on layout, spacing and font to communicate with the user. While I do understand that this most likely isn't a design restaurants would go for it is a design I am particularly interested in because I feel like the quality and the thought put into the code behind the design gives it its visual appeal. I have also added some color to show the way I like defining colors in CSS.
+    
+    Using \texttt{00\_reset.css} is a personal preference. This file is used to remove all padding, margins, base colors and backgrounds defined in the browsers default values, giving me a blank slate to start from. It also sets \texttt{box-sizing: border-box;} on all elements.
+
+    \texttt{01\_font.css} file sets the new baseline for font elements along with linking the self-hosted fonts.
+
+    \texttt{02\_site.css} file sets the new baseline for all other elements that were reset. Its other functions are as follows:
+    \begin{enumerate}
+        \item Align the content in each of the main parts of the page (header, footer, main)
+        \item Define the maximum width of the content
+        \item Define the mobile specific classes
+        \item Define media queries
+    \end{enumerate}
+
+    \texttt{03\_styles.css} This file defines classes for elements that function as a group and might be used in some pages, but probably not in all.
+
+    \texttt{<PageName>.cshtml.css} This files define scoped css for specific pages. Due to a problem with applying scoped css to tag helpers the css is generally scoped using \texttt{.page ::deep <tag helper name>} selector.
+
+\end{description}
+
+\subsection{Database}
+In most cases making a separate section for a database when using \texttt{EntityFrameworkCore} isn't necessary, but in this case since I opted to use triggers, which aren't supported natively by it I had to use SQL to define them. The reason for using triggers is mostly due to the fact this is an exercise and I wanted some experience debugging a database without an added layer of abstraction. The triggers are best viewed in the SQL Server Object Explorer (or SSMS) in the \texttt{localdb} database that is created when building the app from visual studio without the use of docker. Both the triggers are on the table \texttt{dbo.Reservation}. The \texttt{EntityFrameworkCore} code that builds the triggers into the database is in the \texttt{./Migrations} folder under the name \texttt{<numbers>\_AddInsertReservationTrigger.cs} and \texttt{<numbers>\_AddUpdateTrigger.cs}. The SQL query is made more complicated because it has to support inserting more than one row due to data seeding. In both explanations I have omitted the necessary converting from \texttt{varchar{MAX}} to \texttt{JSON}
+\begin{description}
+    \item[\texttt{InsertTrigger}] The insert trigger is used to calculate the change of the table \texttt{dbo.RestaurantState} on each insert. It does so in the following way:
+    \begin{enumerate}
+        \item From the \texttt{inserted} rows calculate the increase in guests per date
+        \item \texttt{UPDATE} the rows for the dates that already exist in the table by adding the sum of guests per date to the current state.
+        
+        This quietly fails if the rows don't exist.
+
+        \item \texttt{INSERT} new rows for non existing date rows
+        \item \texttt{SELECT} from the \texttt{inserted} rows only the rows that are \texttt{IsPrivateDining=0}
+        This makes sure the state of regular and private dining is separate.
+        \item \texttt{UPDATE} the values in the JSON field \texttt{OccupancyPerTimeSlot} taking into account the current state of it.
+    \end{enumerate}
+    
+    \item[\texttt{UpdateTrigger}] The update trigger implements the logic for the change of the \texttt{Reservation.Status} field. It does so by:
+    \begin{enumerate}
+        \item The first \texttt{IF} is a terminating if checking whether the status change is \texttt{"Cancelled"}.
+        
+        If the status change isn't \texttt{"Cancelled"} the trigger terminates.
+        \item \texttt{UPDATES} the value of guests on a given day in the table \texttt{dbo.RestaurantState} by subtracting the number of guests in the cancelled reservation.
+        \item The second \texttt{IF} protecting the guests per timeslot state if the cancelled reservation is private dining
+        \item \texttt{UPDATES} the value of guest amount per timeslot by subtracting the number of guests in the cancelled reservation.
+    \end{enumerate}
+\end{description}
+
+\section{Conclusion}
+I have put a lot of time into this project, mostly because I just didn't want to call it finished, since there was always something that could be improved. This section is a way for me to resolve the fact that despite having plenty of time I would still have things to add, remove, make better or different.
+\subsection{Limitations and assumptions}
+\subsubsection{Assumptions}
+\begin{itemize}
+        \item I have assumed that the maximum number of guests per timeslot takes into account the fact that those guests don't have to leave after thirty minutes or after three hours or at all.
+        \item By using \texttt{DateTime.Now} I have assumed that the system time is set to CET.
+        \item I have made the assumption that tables are something the staff takes care of and prepares without the need for assistance from the app.
+\end{itemize}
+\subsubsection{Limitations}
+\begin{itemize}
+        \item Due to the way the \texttt{UpdateTrigger} is set up the code doesn't support seeding the data with reservations whose status isn't \texttt{"Pending"}
+        \item Due to time constraints the \texttt{RestaurantInfo} is implemented only on the server side, while the javascript still uses hardcoded values.
+        \item Due to time constrains the \texttt{IsPrivateDining=true} reservations don't use a table field to track their state, they instead use the old LINQ query way which I do think is easier to understand.
+        \item The test for a valid \texttt{IsPrivateDining} reservation can only be ran once, because I am not clearing the database state after a test has been run.
+        \item My tests are quite simple and not very extensive. It is quite possible there are oversights in the code causing unwanted results.
+        \item Some tests might break depending on how far in the future they are run.
+\end{itemize}
+\subsection{Where to take the codebase next}
+This list will feature things to implement and improve upon in no specific order:
+\begin{description}
+    \item[\texttt{Model}] I have obviously used a database but I haven't used the fact that it is a relational database at all. Some of the ways the code can be modified is by adding a foreign key to the \texttt{Reservation} class that points to a primary key in \texttt{RestaurantInfo}. This would allow for multiple restaurant sites to share a database. 
+    
+    Secondly the \texttt{Reservation} class can be split into two classes \texttt{Person} and \texttt{ReservationInfo} allowing for more options in the future. The role of the current \texttt{Reservation} table is then achieved with a simple table view.
+    
+    Adding meta data to the \texttt{Reservation} in the form of \texttt{Reservation.CreatedOn} and \texttt{Reservation.UpdatedOn} seems important, although its importance I wouldn't be able to judge currently. 
+
+\end{description}
+
+\end{document}
