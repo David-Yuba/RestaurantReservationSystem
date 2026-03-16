@@ -3,6 +3,7 @@
 document.addEventListener("DOMContentLoaded", main);
 window.addEventListener("resize", main);
 
+// #region Functions that set sizes and positions hard to achieve with css
 function getHeaderHeight() {
     const headerElement = document.querySelector("header");
     document.body.style.setProperty("--header-height", `${headerElement.getBoundingClientRect().height}px`);
@@ -30,11 +31,14 @@ function positionLegendTableAndButton() {
 }
 function setTableColumnWidth() {
     const tableHeadings = Array.from(document.querySelectorAll("th"));
+    // This variable changes the width of the space between the different columns
     const rightPadding = 32;
     const tableData = Array.from(document.querySelectorAll("td"));
     if (tableHeadings.length == 0 || tableData.length == 0) return;
 
     let columnWidths = [];
+    // Two for loops that allow the traversal of the table elements column to row
+    // and finding the highest width of a data field inside each individual column
     for (let i = 0; i < tableHeadings.length ; i++){
         const tableHeadingWidth = tableHeadings[i].getBoundingClientRect().width;
         for (let j=i ; j<tableData.length ; j+=tableHeadings.length+1){
@@ -79,6 +83,8 @@ function setDateTableSizeAndPosition() {
         table.style.top = `${dateInputFieldPosition[1] + dateInputFieldSize[1]}px`;
     });
 }
+// #endregion
+
 
 function main() {
     getHeaderHeight();
@@ -87,6 +93,8 @@ function main() {
     positionLegendTableAndButton();
     getNavButtonHeight();
 }
+
+// #region Functions that control the way the mobile menu button behaves
 function onMobileMenuClick() {
     const mobileMenu = document.getElementsByClassName("mobile-main-navigation")[0];
     const mobileMenuButton = document.getElementsByClassName("mobile-navigation-button")[0];
@@ -99,6 +107,9 @@ function onMobileMenuBlur() {
     mobileMenu.classList.remove("active");
     mobileMenuButton.classList.remove("active");
 }
+// #endregion
+
+// #region Functions that control the way the legend button behaves
 function onLegendClick() {
     const legendTable = document.getElementsByClassName("legend-table")[0];
     if (!legendTable) return;
@@ -109,6 +120,15 @@ function onLegendBlur(event) {
     const legendTable = document.getElementsByClassName("legend-table")[0];
     legendTable.classList.add("invisible");
 }
+// #endregion
+
+// A function that allows a click on the whole table row to take you to the reservation details
+function onReservationClick(id) {
+    const detailsButton = document.getElementById(`${id}`);
+    detailsButton.click();
+}
+
+// #region Functions that control the way the date input interacts with the date table
 function onDateInputFocus(event) {
     event.preventDefault();
     let table = document.querySelector(".date-table");
@@ -136,10 +156,10 @@ function onDateDayClick(event) {
     dateInputField.value = event.target.getAttribute("date-value");
     dateInputField.dispatchEvent(new InputEvent("input"));
 }
-function onReservationClick(id) {
-    const detailsButton = document.getElementById(`${id}`);
-    detailsButton.click();
-}
+// #endregion
+
+// #region Functions that do client side validation on given inputs
+// The async once also send a get request with a query string
 function onPrivateDiningInput() {
     const url = window.location.href;
     const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
@@ -184,12 +204,11 @@ function onPrivateDiningInput() {
         $.validator.unobtrusive.parse(form);
 
         timeSlotOptionEls.forEach(function (el) {
-            el.classList.remove("hidden"); 
+            el.classList.remove("hidden");
         });
         if (partySizeInputEl.value) $(partySizeInputEl).valid();
     }
 }
-
 async function onPartySizeInput(event) {
     const url = window.location.href;
     const partySizeInputEl = document.getElementsByClassName("party-size-input")[0];
@@ -248,6 +267,7 @@ async function onDateInput(event) {
     const timeSlotInputEl = document.getElementsByClassName("time-slot-input")[0];
 
     if (!partySizeInputEl || !dateInputEl || !timeSlotInputEl) return;
+    // The date input has the added update whether the privateDiningField should be visible or not
     const selectedDay = new Date(reformatDateString(dateInputEl.value)).getDay();
     const privateDiningFieldEl = document.getElementsByClassName("private-dining-field")[0];
     if (selectedDay == 5 || selectedDay == 6) {
@@ -342,7 +362,50 @@ if (IS_PRIVATE_DINING) {
         console.error(error.message);
     }
 }
+async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
+    try {
+        const response = await fetch(`${url}?handler=PrivateDining&Date=${reformatDateString(dateInputEl.value)}&TimeSlot=${timeSlotInputEl.value}`)
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        let occupancyList = await response.json();
+        const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
 
+        const privateDiningTimeSlots = ["18:00:00", "18:30:00", "19:00:00", "19:30:00", "20:00:00", "20:30:00", "21:00:00"]
+        timeSlotOptionEls.forEach(function (el) {
+            if (occupancyList.some(slot => reformatTimeString(slot) == el.value)) {
+                el.classList.add("hidden");
+            }
+            else if (privateDiningTimeSlots.some((slot) => slot == el.value))
+                el.classList.remove("hidden");
+        });
+
+        if (partySizeInputEl.value) $(partySizeInputEl).valid();
+        if (timeSlotInputEl.value) {
+            isCurrentValueValid(timeSlotInputEl, occupancyList, 0);
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+// #endregion
+
+// Function used on the form data before it is submitted
+function reformatData() {
+    const dateInputEl = document.getElementsByClassName("date-input-field")[0];
+    if (dateInputEl.value == "") return;
+
+    // Change the value of the input to a supported format before posting to the server
+    // and in case the reservations is unsuccessful reformat the date back to user input
+    const [day, month, year] = dateInputEl.value.split('-');
+    dateInputEl.value = `${month}-${day}-${year}`;
+    setTimeout(function () {
+        dateInputEl.value = `${day}-${month}-${year}`;
+    }, 1)
+}
+
+
+// #region Helper functions used throught the code
 function reformatDateString(d) {
     const [date, month, year] = d.split("-");
     return `${month}-${date}-${year}`;
@@ -384,40 +447,4 @@ if (IS_PRIVATE_DINING) {
         }
     }
 }
-
-async function updateView(url, partySizeInputEl, dateInputEl, timeSlotInputEl) {
-    try {
-        const response = await fetch(`${url}?handler=PrivateDining&Date=${reformatDateString(dateInputEl.value) }&TimeSlot=${timeSlotInputEl.value}`)
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        let occupancyList = await response.json();
-        const timeSlotOptionEls = Array.from(document.getElementsByClassName("time-slot-option"));
-
-        const privateDiningTimeSlots = ["18:00:00", "18:30:00", "19:00:00", "19:30:00", "20:00:00", "20:30:00", "21:00:00"]
-        timeSlotOptionEls.forEach(function (el) {
-            if (occupancyList.some(slot => reformatTimeString(slot) == el.value)) {
-                el.classList.add("hidden");
-            }
-            else if (privateDiningTimeSlots.some((slot) => slot == el.value))
-                el.classList.remove("hidden");
-        });
-
-        if (partySizeInputEl.value) $(partySizeInputEl).valid();
-        if (timeSlotInputEl.value) {
-            isCurrentValueValid(timeSlotInputEl, occupancyList, 0);
-        }
-    } catch (error) {
-        console.error(error.message);
-    }
-}
-function reformatData() {
-    const dateInputEl = document.getElementsByClassName("date-input-field")[0];
-    if (dateInputEl.value == "") return;
-
-    const [day, month, year] = dateInputEl.value.split('-');
-    dateInputEl.value = `${month}-${day}-${year}`;
-    setTimeout(function () {
-        dateInputEl.value = `${day}-${month}-${year}`;
-    }, 1)
-}
+// #endregion

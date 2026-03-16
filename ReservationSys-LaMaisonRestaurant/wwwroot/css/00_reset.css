@@ -47,13 +47,25 @@ blockquote, q {
     quotes: none;
 }
 
-    blockquote:before, blockquote:after,
-    q:before, q:after {
-        content: '';
-        content: none;
-    }
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
 
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+
+input[type="submit"] {
+    padding: 0px;
+    border: none;
+    background: transparent;
+}
+
+button {
+    padding: 0px;
+    border: none;
+    background: transparent;
 }

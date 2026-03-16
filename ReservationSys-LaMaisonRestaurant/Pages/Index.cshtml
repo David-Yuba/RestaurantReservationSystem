@@ -49,7 +49,8 @@
 @{
     TimeOnly startTime = Model.RestaurantInfo.OpeningHours;
     TimeOnly endTime = Model.RestaurantInfo.ClosingHours;
-
+    
+    // Populates the options for all possible timeslots
     for (TimeOnly i=startTime ; i < endTime.Add(-Model.RestaurantInfo.ReservationSlotIncrements) ; i = i.Add(Model.RestaurantInfo.ReservationSlotIncrements)){
                 <option value="@(i.ToString("HH:mm"))" class="time-slot-option">@(i.ToString("HH:mm"))</option>
     }
@@ -75,6 +76,7 @@
     <div class="date-table" onclick="onDateDayClick(event)">
 @{
     DateTime today = DateTime.Now;
+        // Gets the current month and year
         <div tabindex="0" class="month-year" month-year>@today.ToString("MMMM") - @today.Year</div>
 }
         <div class="date-table-days">
@@ -87,15 +89,16 @@
             <div tabindex="0" class="day-name" day-name>Su</div>
 @{
     DateOnly todaysDate = DateOnly.FromDateTime(DateTime.Now);
+    // Fills the start of the table with empty divs to maintains alignment with day names
     for(DayOfWeek i=DayOfWeek.Monday ; i < (todaysDate.DayOfWeek != DayOfWeek.Sunday ? todaysDate.DayOfWeek : DayOfWeek.Saturday + 1) ; i++) {
             <div tabindex="0" class="day-name" day-name></div>
     }
+    // Fills the table with the 30 days into the future
     for (int i=0 ; i<30 ; i++){
                     <div tabindex="0" date-value="@(todaysDate.ToString("dd-MM-yy"))">@(todaysDate.Day)</div>
         todaysDate = todaysDate.AddDays(1);
     }
 }
-
         </div>
         <div></div>
     </div>

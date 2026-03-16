@@ -78,19 +78,21 @@ tr:hover:not(thead tr) {
     background-color: aliceblue;
 }
 
-.full {
-    color: brown;
-}
-
-.private-dining {
-    border-left: 2px solid var(--private-dining-color);
-}
-
 .extra-info {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
+.full {
+    color: var(--full-timeslot-color);
+}
+.private-dining {
+    color: var(--private-dining-color);
+}
+.full-timeslot {
+    color: var(--full-timeslot-color);
+}
 .Cancelled {
     border-bottom: 2px dotted var(--cancelled-status-color);
 }

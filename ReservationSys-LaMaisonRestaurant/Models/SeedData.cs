@@ -229,6 +229,19 @@ public static class SeedData
                     TimeSlot = new TimeOnly(18, 0),
                     PartySize = 5,
                     IsPrivateDining = false
+                },
+                new Reservation
+                {
+                    Status = "Pending",
+                    ReferenceCode = "XYZ456",
+                    FullName = "Nelson Henry",
+                    Email = "Nelson.Henry@example.com",
+                    PhoneNumber = "555-643-3243",
+                    SpecialRequest = "Away from the bar.",
+                    Date = new DateOnly(2026, 03, 26),
+                    TimeSlot = new TimeOnly(18, 0),
+                    PartySize = 7,
+                    IsPrivateDining = false
                 }
             );
             context.SaveChanges();

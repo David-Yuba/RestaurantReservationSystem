@@ -17,6 +17,7 @@ ON dbo.Reservation
 AFTER INSERT
 AS
 BEGIN
+-- From the inserted rows calculate the increase in guests per date
 	DECLARE @GuestSumOverDates Table (
 		Date DATE,
 		TimeSlot TIME,
@@ -27,17 +28,20 @@ BEGIN
 	FROM inserted 
 	GROUP BY Date, TimeSlot
 
+-- UPDATE the rows for the dates that already exist in the table by adding the sum of guests per date to the current state.
     UPDATE dbo.RestaurantState
     SET Guests = Guests + i.PartySizeSum
     FROM dbo.RestaurantState rs
     INNER JOIN @GuestSumOverDates i ON rs.Date = i.Date
 
+-- INSERT new rows for non existing date rows
 	INSERT INTO dbo.RestaurantState (Date, Guests)
 	SELECT i.Date, i.PartySizeSum
 	FROM @GuestSumOverDates i
 	LEFT JOIN dbo.RestaurantState rs ON rs.Date = i.Date
 	WHERE rs.Date IS NULL
 
+-- SELECT from the inserted rows only the rows that are IsPrivateDining=0
 	DELETE FROM @GuestSumOverDates
 	INSERT INTO @GuestSumOverDates 
 	SELECT Date, TimeSlot, SUM(PartySize) AS PartySizeSum 
@@ -56,6 +60,7 @@ BEGIN
 		PartySizeSum INT
 	)
 
+-- Take into account the current state of the field
 	INSERT INTO @CurrentState
 	SELECT Date, TimeSlots.TimeSlot, TimeSlots.PartySizeSum
 	FROM dbo.RestaurantState rs
@@ -91,6 +96,7 @@ BEGIN
 	FROM @GuestSumOverDates outer_t
 	GROUP BY Date
 
+-- UPDATE the values in the JSON field OccupancyPerTimeSlot 
 	UPDATE dbo.RestaurantState
 	SET OccupancyPerTimeSlot = JsonTable.OccupancySlotsJson
 	FROM RestaurantState rs

@@ -6,8 +6,10 @@ html {
     --form-gap: 4px;
     --background-color: white;
     --navigation-button-color: black;
+    --button-background-color: #569CD670;
 
-    --private-dining-color: gold;
+    --full-timeslot-color: brown;
+    --private-dining-color: #B8860B;
     --cancelled-status-color: red;
     --pending-status-color: black;
     --completed-status-color: darkgreen;
@@ -87,6 +89,13 @@ header nav {
     background-color: transparent;
     border: var(--nav-bar-border-width) solid var(--navigation-button-color);
     border-radius: 8px;
+}
+
+button, input[type="submit"] {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: var(--button-background-color);
+    cursor: pointer;
 }
 
 

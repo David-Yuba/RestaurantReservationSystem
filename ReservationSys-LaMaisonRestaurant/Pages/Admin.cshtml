@@ -65,8 +65,8 @@
         <tbody>
             @foreach (var item in Model.Reservation)
             {
-                <tr onclick="onReservationClick(@item.Id)" class="@(item.IsPrivateDining ? "private-dining" : "") @(item.Status)">
-                    <td>
+                <tr onclick="onReservationClick(@item.Id)" class="@(item.Status)">
+                    <td class="@(item.IsPrivateDining ? "private-dining" : "")">
                         @Html.DisplayFor(modelItem => item.ReferenceCode)
                     </td>
                     <td>
@@ -95,6 +95,7 @@
         </tbody>
     </table>
     <div class="legend-table invisible">
+        <div class="full-timeslot">Full timeslot</div>
         <div class="private-dining">Private dining</div>
         <div class="Cancelled">Cancelled</div>
         <div class="Pending">Pending</div>

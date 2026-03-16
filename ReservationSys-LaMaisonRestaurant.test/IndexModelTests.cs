@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +14,7 @@ namespace ReservationSys_LaMaisonRestaurant.test;
 
 public class IndexModelTests
 {
+    #region Helper methods
     private ReservationSys_LaMaisonRestaurantContext CreateDatabaseContext()
     {
         var connectionString = Environment.GetEnvironmentVariable("ReservationSys_LaMaisonRestaurantContext");
@@ -26,13 +29,21 @@ public class IndexModelTests
 
         return new ReservationSys_LaMaisonRestaurantContext(options);
     }
+    public static TempDataDictionary CreateTempData()
+    {
+        var context = new DefaultHttpContext();
+        return new TempDataDictionary(context, new TestTempDataProvider());
+    }
+    #endregion
 
+    #region Trivial tests
     [Fact]
     public async Task OnPostAsync_InvalidModelState_ReturnsPage()
     {
         // Arrange
         var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
         model.ModelState.AddModelError("Reservation.Name", "Name is required");
 
         // Act
@@ -47,6 +58,7 @@ public class IndexModelTests
         // Arrange
         var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
 
         model.Reservation = new Reservation
         {
@@ -75,6 +87,7 @@ public class IndexModelTests
         // Arrange
         var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
 
         model.Reservation = new Reservation
         {
@@ -103,6 +116,7 @@ public class IndexModelTests
         // Arrange
         var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
 
         model.Reservation = new Reservation
         {
@@ -131,6 +145,8 @@ public class IndexModelTests
         // Arrange
         using var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
+
 
         model.Reservation = new Reservation
         {
@@ -158,13 +174,47 @@ public class IndexModelTests
         Assert.NotNull(savedReservation);
         Assert.Equal("Pending", savedReservation.Status);
     }
+    #endregion
 
+    [Fact]
+    public async Task OnPostAsync_FailedReservation_TimeslotFull_ReturnsPage()
+    {
+        // Arrange
+        using var context = CreateDatabaseContext();
+        var model = new IndexModel(context);
+        model.TempData = CreateTempData();
+
+        DateTime testingDate = new DateTime(2026, 3, 26);
+
+        model.Reservation = new Reservation
+        {
+            Status = "Pending",
+            ReferenceCode = "defaultValue",
+            FullName = "Duplicate Timeslots",
+            Email = "alice.johnson@example.com",
+            PhoneNumber = "555-123-4567",
+            SpecialRequest = "Window seat, please.",
+            Date = DateOnly.FromDateTime(testingDate),
+            TimeSlot = new TimeOnly(18, 00),
+            PartySize = 6,
+            IsPrivateDining = true
+        };
+
+        // Act
+        var result = await model.OnPostAsync();
+
+        // Assert
+        var redirectResult = Assert.IsType<PageResult>(result);
+    }
+
+    #region IsPrivateDining tests
     [Fact]
     public async Task OnPostAsync_FailedReservation_SameTimeslotIsPrivateDining_ReturnsPage()
     {
         // Arrange
         using var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
 
         DateTime testingDate = new DateTime(2026, 3, 28);
 
@@ -195,8 +245,9 @@ public class IndexModelTests
         // Arrange
         using var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
 
-        DateTime testingDate = new DateTime(2026, 3, 14);
+        DateTime testingDate = new DateTime(2026, 3, 25);
 
         model.Reservation = new Reservation
         {
@@ -225,8 +276,9 @@ public class IndexModelTests
         // Arrange
         using var context = CreateDatabaseContext();
         var model = new IndexModel(context);
+        model.TempData = CreateTempData();
 
-        DateTime testingDate = new DateTime(2026, 3, 14);
+        DateTime testingDate = new DateTime(2026, 3, 27);
 
         model.Reservation = new Reservation
         {
@@ -258,9 +310,11 @@ public class IndexModelTests
     {
         // Arrange
         using var context = CreateDatabaseContext();
-        var model = new IndexModel(context);
 
-        DateTime testingDate = new DateTime(2026, 3, 17);
+        var model = new IndexModel(context);
+        model.TempData = CreateTempData();
+
+        DateTime testingDate = new DateTime(2026, 4, 3);
 
         model.Reservation = new Reservation
         {
@@ -288,4 +342,15 @@ public class IndexModelTests
         Assert.NotNull(savedReservation);
         Assert.Equal("Pending", savedReservation.Status);
     }
+    #endregion
+}
+public class TestTempDataProvider : ITempDataProvider
+{
+    private Dictionary<string, object> _data = new();
+
+    public IDictionary<string, object> LoadTempData(HttpContext context)
+        => _data;
+
+    public void SaveTempData(HttpContext context, IDictionary<string, object> values)
+        => _data = new Dictionary<string, object>(values);
 }
