@@ -261,6 +261,8 @@ I have put a lot of time into this project, mostly because I just didn't want to
         \item The test for a valid \texttt{IsPrivateDining} reservation can only be ran once, because I am not clearing the database state after a test has been run.
         \item My tests are quite simple and not very extensive. It is quite possible there are oversights in the code causing unwanted results.
         \item Some tests might break depending on how far in the future they are run.
+        \item The seeding doesn't allow different timeslot on the same date because the insert trigger is bugged.
+        \item The admin page doesn't have two different view components, but redirects the user on click to a different route. An oversight on my part since I read the specification the way I wanted it to be.
 \end{itemize}
 \subsection{Where to take the codebase next}
 This list will feature things to implement and improve upon in no specific order:

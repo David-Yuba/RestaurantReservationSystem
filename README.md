@@ -79,4 +79,4 @@ You can access the app environment through docker desktop container reservations
 ## Documentation
 I have written a Latex file to serve as documentation for the codebase. The file is in the root directory, with its compiled pdf version.
 However I haven't had the time to proof read it or to make it pretty, which is why it might not be very good but I do believe it does shine a light on my thought process while building the app as well as some conventions I decided to follow.
-For that reason I also added annotations to the codebase in the form of comments, and grouped code together with regions where possible.
+For that reason I also added annotations to the codebase in the form of comments, and grouped code together with regions where possible. The most important section is the limitation section, which does also list things that are wrong with the app.
