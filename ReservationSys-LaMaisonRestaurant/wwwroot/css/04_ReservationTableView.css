@@ -1,0 +1,96 @@
+﻿.reservation-table {
+    --n-columns: 7;
+    --column-gap: 16px;
+    --heading-row-gap: 16px;
+    --row-gap: 16px;
+    --heading-row-padding: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.reservation-table thead, .reservation-table tbody {
+    display: inherit;
+    flex-direction: column;
+}
+
+.reservation-table thead {
+    margin-bottom: var(--heading-row-gap);
+    padding-bottom: var(--heading-row-padding);
+    border-bottom: 1px solid black;
+}
+
+.reservation-table tbody {
+    gap: var(--row-gap);
+}
+
+
+.reservation-table tr {
+    display: flex;
+    gap: var(--column-gap);
+}
+
+.reservation-table thead .reservation-table tr {
+}
+
+.reservation-table tr:not(thead tr) {
+    --border-color: black;
+    border-bottom: 2px dotted var(--border-color);
+}
+
+.reservation-table th {
+    text-align: left;
+    font-size: 1.1rem;
+}
+
+.reservation-table td {
+    font-weight: 500;
+}
+
+.reservation-table tr {
+    padding: 0px 8px;
+}
+
+.reservation-table .details-button, .reservation-table .details-button * {
+    display: none;
+}
+
+.reservation-table tr:not(thead tr) {
+    padding: 8px 8px 0px 8px;
+    cursor: pointer;
+}
+
+.reservation-table tr:hover:not(thead tr) {
+    background-color: aliceblue;
+}
+
+.reservation-table .full {
+    color: var(--full-timeslot-color);
+}
+
+.reservation-table .private-dining {
+    color: var(--private-dining-color);
+}
+
+.reservation-table .full-timeslot {
+    color: var(--full-timeslot-color);
+}
+
+.reservation-table .Cancelled {
+    border-bottom: 2px dotted var(--cancelled-status-color);
+}
+
+.reservation-table .Pending {
+    border-bottom: 2px dotted var(--pending-status-color);
+}
+
+.reservation-table .Completed {
+    border-bottom: 2px dotted var(--completed-status-color);
+}
+
+.reservation-table .Confirmed {
+    border-bottom: 2px dotted var(--confirmed-status-color);
+}
+
+.invisible {
+    visibility: hidden;
+}

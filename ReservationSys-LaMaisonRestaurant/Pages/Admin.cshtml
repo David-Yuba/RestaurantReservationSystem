@@ -36,64 +36,14 @@
         <button onclick="onLegendClick(event)" onblur="onLegendBlur(event)" class="legend-button">Legend</button>
     </div>
     <h1>Reservations</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Reservation[0].ReferenceCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Reservation[0].FullName)
-                </th>
-                <th class="hide-email-field">
-                    @Html.DisplayNameFor(model => model.Reservation[0].Email)
-                </th>
-                <th class="hide-phone-field">
-                    @Html.DisplayNameFor(model => model.Reservation[0].PhoneNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Reservation[0].Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Reservation[0].TimeSlot)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Reservation[0].PartySize)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Reservation)
-            {
-                <tr onclick="onReservationClick(@item.Id)" class="@(item.Status)">
-                    <td class="@(item.IsPrivateDining ? "private-dining" : "")">
-                        @Html.DisplayFor(modelItem => item.ReferenceCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
-                    </td>
-                    <td class="hide-email-field">
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td class="hide-phone-field">
-                        @Html.DisplayFor(modelItem => item.PhoneNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td class="@(Model.IsSlotFull(item.Date,item.TimeSlot) ? "full" : "not-full")">
-                        @Html.DisplayFor(modelItem => item.TimeSlot)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PartySize)
-                    </td>
-                    <td class="details-button">
-                        <a class="details-button" asp-page="./ReservationDetails" asp-route-id="@item.Id" id="@item.Id">Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @await Component.InvokeAsync("ReservationList",
+                     new
+                     {
+                         filterDate = Model.FilterDate,
+                         filterStatus = Model.FilterStatus,
+                         sortDateBy = Model.SortDateBy
+                     }
+                     )
     <div class="legend-table invisible">
         <div class="full-timeslot">Full timeslot</div>
         <div class="private-dining">Private dining</div>
