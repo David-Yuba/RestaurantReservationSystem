@@ -83,3 +83,5 @@ For that reason I also added annotations to the codebase in the form of comments
 
 ## Master vs AdminWithViewComponents
 I have created the second branch AdminWithViewComponents because on a last read through of the specification I noticed I interpreted the specification the way I wanted to. The AdminWithViewComponents is mostly identical, although it doesn't implement the feature to show full time slots on the list view. I will not merge them because I do believe there is some utility in showing them side by side, and I don't have enough time to fully develop the AdminWithViewComponents branch.
+
+To navigate the admin page click a reservation row to enter details view, and click the apply button to exit details view back to the reservation list.
