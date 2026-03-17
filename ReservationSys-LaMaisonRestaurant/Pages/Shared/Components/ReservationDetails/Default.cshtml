@@ -1,0 +1,91 @@
+﻿@model ReservationSys_LaMaisonRestaurant.Models.Reservation
+
+<h1>Reservation</h1>
+<form method="post" class="details-view">
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.ReferenceCode)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.ReferenceCode)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.FullName)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.FullName)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.Email)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.Email)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.IsPrivateDining)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.IsPrivateDining)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.Date)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.Date)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.TimeSlot)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.TimeSlot)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.PartySize)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.PartySize)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.SpecialRequest)
+        </h5>
+        <p class="form-data">
+            @Html.DisplayFor(model => model.SpecialRequest)
+        </p>
+    </div>
+    <div class="form-field">
+        <h5 class="form-label">
+            @Html.DisplayNameFor(model => model.Status)
+        </h5>
+        <select asp-for="Status">
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+    <div class="form-field">
+        <input type="submit" value="Apply changes" />
+    </div>
+</form>

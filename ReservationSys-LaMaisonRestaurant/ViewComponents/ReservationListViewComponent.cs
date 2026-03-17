@@ -63,16 +63,4 @@ public class ReservationListViewComponent : ViewComponent
 
         return reservations.ToListAsync();
     }
-    public bool IsSlotFull(DateOnly date, TimeOnly time)
-    {
-        var sumOfPeopleOnSameDateTime = (from r in _context.Reservation
-                                         where r.Date == date && r.TimeSlot == time && r.IsPrivateDining == false
-                                         select r.PartySize).Sum();
-
-        if (sumOfPeopleOnSameDateTime >= RestaurantInfo.TotalGuestsPerSlot)
-        {
-            return true;
-        }
-        else return false;
-    }
 }

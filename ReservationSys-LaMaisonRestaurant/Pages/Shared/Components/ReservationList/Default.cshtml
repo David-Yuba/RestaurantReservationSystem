@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<ReservationSys_LaMaisonRestaurant.Models.Reservation>
 
+<h1>Reservations</h1>
 <table class="reservation-table">
     <thead>
         <tr>
@@ -52,7 +53,7 @@
                     @Html.DisplayFor(modelItem => item.PartySize)
                 </td>
                 <td class="details-button">
-                    <a class="details-button" asp-page="./ReservationDetails" asp-route-id="@item.Id" id="@item.Id">Details</a>
+                    <a class="details-button" asp-page="./Admin" asp-route-id="@item.Id" id="@item.Id">Details</a>
                 </td>
             </tr>
         }

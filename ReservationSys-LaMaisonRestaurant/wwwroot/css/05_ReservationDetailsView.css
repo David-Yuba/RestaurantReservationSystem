@@ -1,0 +1,26 @@
+﻿.details-view {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.details-view .form-field {
+    display: flex;
+    gap: 12px;
+}
+
+.details-view .form-data {
+    padding-left: 4px;
+}
+
+.details-view .option, .details-view select {
+    font-size: 1rem;
+}
+
+.details-view h5 {
+    font-size: 1rem;
+}
+
+.details-view p {
+    font-size: 1rem;
+}

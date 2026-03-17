@@ -80,3 +80,6 @@ You can access the app environment through docker desktop container reservations
 I have written a Latex file to serve as documentation for the codebase. The file is in the root directory, with its compiled pdf version.
 However I haven't had the time to proof read it or to make it pretty, which is why it might not be very good but I do believe it does shine a light on my thought process while building the app as well as some conventions I decided to follow.
 For that reason I also added annotations to the codebase in the form of comments, and grouped code together with regions where possible.
+
+## Master vs AdminWithViewComponents
+I have created the second branch AdminWithViewComponents because on a last read through of the specification I noticed I interpreted the specification the way I wanted to. The AdminWithViewComponents is mostly identical, although it doesn't implement the feature to show full time slots on the list view. I will not merge them because I do believe there is some utility in showing them side by side, and I don't have enough time to fully develop the AdminWithViewComponents branch.

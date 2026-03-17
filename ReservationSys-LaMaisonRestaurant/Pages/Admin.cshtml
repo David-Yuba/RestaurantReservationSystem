@@ -31,19 +31,30 @@
         </div>
         <input type="submit" value="Apply"/>
     </form>
-    <div class="extra-info">
-        <h4>Expected number of guests @(Model.FilterDate is null ? "today" : "on " + Model.FilterDate?.ToString("dd-MM-yyyy")): @Model.GuestNumber</h4>
-        <button onclick="onLegendClick(event)" onblur="onLegendBlur(event)" class="legend-button">Legend</button>
-    </div>
-    <h1>Reservations</h1>
-    @await Component.InvokeAsync("ReservationList",
-                     new
-                     {
-                         filterDate = Model.FilterDate,
-                         filterStatus = Model.FilterStatus,
-                         sortDateBy = Model.SortDateBy
-                     }
-                     )
+    @if (Model.Id != null)
+    {
+        @await Component.InvokeAsync("ReservationDetails",
+                         new
+                         {
+                             id = Model.Id
+                         }
+                         );
+    }
+    else
+    {
+        <div class="extra-info">
+            <h4>Expected number of guests @(Model.FilterDate is null ? "today" : "on " + Model.FilterDate?.ToString("dd-MM-yyyy")): @Model.GuestNumber</h4>
+            <button onclick="onLegendClick(event)" onblur="onLegendBlur(event)" class="legend-button">Legend</button>
+        </div>
+        @await Component.InvokeAsync("ReservationList",
+                         new
+                         {
+                             filterDate = Model.FilterDate,
+                             filterStatus = Model.FilterStatus,
+                             sortDateBy = Model.SortDateBy
+                         }
+                         );
+    }
     <div class="legend-table invisible">
         <div class="full-timeslot">Full timeslot</div>
         <div class="private-dining">Private dining</div>

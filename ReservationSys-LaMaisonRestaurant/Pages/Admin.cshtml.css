@@ -41,7 +41,7 @@ td {
     font-weight: 500;
 }
 
-.page ::deep form {
+.page ::deep form:not(.details-view) {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
@@ -59,7 +59,7 @@ input[type=submit]{
     gap: 4px;
     text-align: center;
 }
-.page ::deep select {
+.page ::deep select:not(.details-view select) {
     flex-grow: 1;
 }
 

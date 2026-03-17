@@ -27,6 +27,8 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
 
         [BindProperty(SupportsGet = true)]
         public string? SortDateBy { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int? Id { get; set; } = null;
 
         public int GuestNumber { get; set; }
         public async Task OnGetAsync()
@@ -61,8 +63,8 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
             else 
             {
                 reservations = (from r in reservations
-                           orderby (r.Date >= today && r.TimeSlot >= timeNow) ? 0 : 1, r.Date ascending , r.TimeSlot ascending
-                           select r);
+                           orderby (r.Date > today || (r.Date == today && r.TimeSlot >= timeNow)) ? 0 : 1, r.Date ascending, r.TimeSlot ascending
+                                select r);
             }
 
             Reservation = await reservations.ToListAsync();
@@ -85,23 +87,22 @@ namespace ReservationSys_LaMaisonRestaurant.Pages
             }
         }
 
-        /// <summary>
-        /// Query the database for maximum capacity in the givent DateTime
-        /// </summary>
-        /// <param name="date">The Date to query over</param>
-        /// <param name="time">The Time to query over</param>
-        /// <returns>True or false</returns>
-        public bool IsSlotFull(DateOnly date, TimeOnly time)
+        public async Task<IActionResult> OnPostAsync(string status)
         {
-            var sumOfPeopleOnSameDateTime = (from r in _context.Reservation
-                                             where r.Date == date && r.TimeSlot == time && r.IsPrivateDining == false
-                                             select r.PartySize).Sum();
 
-            if (sumOfPeopleOnSameDateTime >= RestaurantInfo.TotalGuestsPerSlot)
+            // Check if the Status value is supported
+            if (status != "Pending" && status != "Confirmed" && status != "Cancelled" && status != "Completed")
             {
-                return true;
+                return Page();
             }
-            else return false;
+            var reservation = _context.Reservation.FirstOrDefault(x => x.Id == Id);
+            if (reservation is not null)
+            {
+                reservation.Status = status;
+                _context.SaveChanges();
+            }
+
+            return RedirectToPage("Admin", new { id = Id });
         }
     }
 }
